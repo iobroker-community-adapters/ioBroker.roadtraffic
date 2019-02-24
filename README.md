@@ -8,6 +8,10 @@
 [![Tests](https://travis-ci.org/BuZZy1337/ioBroker.roadtraffic.svg?branch=master)](https://travis-ci.org/BuZZy1337/ioBroker.roadtraffic)
 
 [![NPM](https://nodei.co/npm/iobroker.roadtraffic.png?downloads=true)](https://nodei.co/npm/iobroker.roadtraffic/)
+## About this Adapter
+This Adapter uses Google Maps API to check the traffic on your routes. You can configure multiple routes and the adapter will check the actual traffic situation and shows you how long your journey will take. (At the moment it saves the time in seconds).
+Adapter is at a veeerryyy early state right now.. I am planning to implement an alarm clock - so you can tell the Adapter at which time you have to be at work - and what should happen when its time to leave/wake up (Start playing Radio and do an Announcement like "It seems like there is some trafficjam on your route. You need to get up now for not being late at work!" on Alexa etc.) ..
+Feel free to create some feature-requests here on Github - just open an Issue for that! ;)
 
 ## Getting started
 First of all: You may be worried about the step "Set up Billing account & Paymentmethod" that Google may ask you for when you create the Account to get the API Key.. Dont worry! Google gives you a credit of 200$ each month.. (Visit https://cloud.google.com/maps-platform/pricing/sheet/ for more information). You can do ~40.000 requests per Month for free..

@@ -49,10 +49,12 @@ adapter.on('message', function (msg) {
 
 adapter.on('ready', function () {
     adapter.getForeignObject('system.config', (err, obj) => {
-        if (obj && obj.native && obj.native.secret) {
-            adapter.config.apiKey = decrypt(obj.native.secret, adapter.config.apiKey || 'empty');
-        } else {
-            adapter.config.apiKey = decrypt('Zgfr56gFe87jJOM', adapter.config.apiKey || 'empty');
+        if (adapter.config.apiKey) {
+            if (obj && obj.native && obj.native.secret) {
+                adapter.config.apiKey = decrypt(obj.native.secret, adapter.config.apiKey || 'empty');
+            } else {
+                adapter.config.apiKey = decrypt('Zgfr56gFe87jJOM', adapter.config.apiKey || 'empty');
+            }
         }
         main();
     });
@@ -182,7 +184,6 @@ function createStates() {
 }
 
 function checkApiKey() {
-    if (!adapter.config.apiKey) return;
     const link = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=Berlin&destinations=Berlin&mode=driving&language=de-DE&departure_time=now&key=' + adapter.config.apiKey;
     request(link, function (error, response, body) {
         if (!error) {

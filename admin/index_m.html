@@ -1,0 +1,168 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+    <script type="text/javascript" src="words.js"></script>
+    <style>
+        .m .col .select-wrapper+label {
+            top: -26px;
+        }
+
+        .m span {
+            font-size: 0.9em;
+        }
+
+        table.highlight>tbody>tr {
+            transition: background-color .25s ease !important;
+        }
+
+        table.highlight>tbody>tr:hover {
+            background-color: rgba(200, 200, 200, 0.5) !important;
+        }
+
+        table.table-values {
+            width: 100%;
+            border-collapse: collapse;
+            border-width: 2px;
+            border-color: #636363;
+            border-style: solid;
+        }
+
+        table.table-values td,
+        table.table-values th {
+            border-width: 2px;
+            border-color: #636363;
+            border-style: solid;
+            padding: 5px;
+        }
+
+        table.table-values thead {
+            background-color: #D4D4D4;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var routepoints = [];
+        var secret;
+
+        function encrypt(key, value) {
+            var result = '';
+            for (var i = 0; i < value.length; ++i) {
+                result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+            }
+            return result;
+        }
+        function decrypt(key, value) {
+            var result = '';
+            for (var i = 0; i < value.length; ++i) {
+                result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+            }
+            return result;
+        }
+
+        function load(settings, onChange) {
+            socket.emit('getObject', 'system.config', function (err, obj) {
+                secret = (obj.native ? obj.native.secret : '') || 'Zgfr56gFe87jJOM';
+                load2(settings, onChange);
+            });
+            onChange(false);
+        }
+
+        function load2(settings, onChange) {
+            if (!settings) return;
+
+            routepoints = settings.routepoints || [];
+
+            $('.value').each(function () {
+                var $key = $(this);
+                var id = $key.attr('id');
+                if ($key.attr('type') === 'checkbox') {
+                    $key.prop('checked', settings[id]).change(function () {
+                        onChange();
+                    });
+                } else {
+                    $key.val($key.attr('id') === 'apiKey' && settings[id] ? decrypt(secret, settings[id]) : settings[id]).change(function () {
+                        onChange();
+                    }).keyup(function () {
+                        onChange();
+                    });
+                }
+            });
+
+            values2table('values', routepoints, onChange);
+
+            onChange(false);
+            M.updateTextFields();
+
+        }
+
+
+        function save(callback) {
+            var obj = {};
+            $('.value').each(function () {
+                var $this = $(this);
+                if ($this.attr('type') === 'checkbox') {
+                    obj[$this.attr('id')] = $this.prop('checked');
+                } else if ($this.attr('id') === 'apiKey') {
+                    obj[$this.attr('id')] = encrypt(secret, $this.val());
+                } else {
+                    obj[$this.attr('id')] = $this.val();
+                }
+            });
+            obj.routepoints = table2values('values');
+            callback(obj);
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="m adapter-container">
+        <div class="row">
+            <div class="row">
+                <div class="input-field col s3 m3 l3">
+                    <img src="roadtraffic.png" class="logo">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12 m1 l1">
+                    <input class="value" id="pollingInterval" type="number" />
+                    <label for="pollingInterval" class="translate">Pollinginterval (in Minutes)</label>
+                </div>
+                <div class="input-field col s12 m11 l11">
+                    <input id="apiKey" class="value" type="text" />
+                    <label for="apiKey" class="translate">Google Maps API Key</label>
+                    <!-- <span class="translate">Google Maps API Key</span> -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12" id="values">
+                    <a class="btn-floating waves-effect waves-light blue table-button-add" style="margin-bottom: 10;"><i
+                            class="material-icons">add</i></a>
+                    <div class="table-values-div">
+                        <table class="table-values highlight">
+                            <thead>
+                                <tr>
+                                    <th data-name="name" class="translate">Name</th>
+                                    <th data-name="origin" class="translate">Origin</th>
+                                    <th data-name="destination" class="translate">Destination</th>
+                                    <th data-buttons="delete" style="width: 40px"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

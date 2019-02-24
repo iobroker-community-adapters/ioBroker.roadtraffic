@@ -1,0 +1,11 @@
+gulpfile.js
+tasks
+.idea
+.git
+test
+.travis.yml
+appveyor.yml
+.vscode
+package-lock.json
+widgets/
+img/

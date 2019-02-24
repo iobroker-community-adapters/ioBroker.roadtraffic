@@ -1,0 +1,88 @@
+{
+    "common": {
+        "name": "roadtraffic",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial adapter",
+                "de": "Initiale Version",
+                "ru": "Первоначальный адаптер",
+                "pt": "Versão inicial",
+                "fr": "Version initiale",
+                "nl": "Eerste release"
+            }
+        },
+        "title": "RoadTraffic",
+        "desc": {
+            "en": "Check actual traffic on the road and be awakened in time to arrive at your destination at the right time",
+            "de": "Überprüfen Sie den tatsächlichen Verkehr auf der Straße und werden Sie rechtzeitig geweckt, um zur richtigen Zeit am Ziel zu sein",
+            "ru": "Проверьте фактическое движение на дороге и будьте вовремя просыпаться, чтобы прибыть к месту назначения в нужное время",
+            "pt": "Verifique o tráfego real na estrada e seja despertado a tempo de chegar ao seu destino no momento certo",
+            "nl": "Controleer het actuele verkeer op de weg en word op tijd gewekt om op het juiste moment op uw bestemming aan te komen",
+            "fr": "Vérifiez le trafic réel sur la route et soyez réveillé à temps pour arriver à destination au bon moment",
+            "it": "Controlla il traffico effettivo sulla strada e sii svegliato in tempo per arrivare a destinazione al momento giusto",
+            "es": "Verifique el tráfico real en la carretera y despiértese a tiempo para llegar a su destino en el momento adecuado",
+            "pl": "Sprawdź rzeczywisty ruch na drodze i obudzić się na czas, aby dotrzeć do miejsca docelowego we właściwym czasie",
+            "zh-cn": "检查道路上的实际交通情况，并及时唤醒，以便在合适的时间到达目的地"
+        },
+        "authors": [
+            "BuZZy1337 <buzzy1337@outlook.de>"
+        ],
+        "platform": "Javascript/Node.js",
+        "license": "MIT",
+        "mode": "daemon",
+        "icon": "roadtraffic.png",
+        "messagebox": true,
+        "subscribe": "messagebox",
+        "materialize": true,
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/BuZZy1337/ioBroker.roadtraffic/master/admin/roadtraffic.png",
+        "keywords": [
+            "traffic",
+            "maps",
+            "route"
+        ],
+        "readme": "https://github.com/BuZZy1337/ioBroker.roadtraffic/blob/master/README.md",
+        "loglevel": "info",
+        "type": "iot-systems"
+    },
+    "native": {
+        "pollingInterval": 10
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "refresh",
+            "type": "state",
+            "common": {
+                "name": "Refresh all routes now.",
+                "type": "boolean",
+                "role": "button",
+                "read": true,
+                "write": true
+            },
+            "native": {}
+        },
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "If Google API Key is valid",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}

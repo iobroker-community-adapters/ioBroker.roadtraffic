@@ -11,7 +11,7 @@ function checkConnectionOfAdapter(cb, counter) {
         return;
     }
 
-    states.getState('system.adapter.doorbird.0.alive', function (err, state) {
+    states.getState('system.adapter.roadtraffic.0.alive', function (err, state) {
         if (err) console.error(err);
         if (state && state.val) {
             cb && cb();
@@ -45,8 +45,8 @@ function checkValueOfState(id, value, cb, counter) {
     });
 }
 
-describe('Test Doorbird', function() {
-    before('Test Doorbird: Start js-controller', function (_done) {
+describe('Test RoadTraffic', function() {
+    before('Test RoadTraffic: Start js-controller', function (_done) {
         this.timeout(600000); // because of first install from npm
 
         setup.setupController(function () {
@@ -68,12 +68,12 @@ describe('Test Doorbird', function() {
         });
     });
 
-    it('Test Doorbird: Check if adapter started', function (done) {
+    it('Test RoadTraffic: Check if adapter started', function (done) {
         this.timeout(5000);
         checkConnectionOfAdapter(done);
     });
 
-    after('Test Doorbird: Stop js-controller', function (done) {
+    after('Test RoadTraffic: Stop js-controller', function (done) {
         this.timeout(6000);
 
         setup.stopController(function (normalTerminated) {

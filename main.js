@@ -182,6 +182,7 @@ function createStates() {
 }
 
 function checkApiKey() {
+    if (!adapter.config.apiKey) return;
     const link = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=Berlin&destinations=Berlin&mode=driving&language=de-DE&departure_time=now&key=' + adapter.config.apiKey;
     request(link, function (error, response, body) {
         if (!error) {
@@ -207,13 +208,15 @@ function checkApiKey() {
 
 function main() {
     adapter.setState('info.connection', false, true);
-    checkApiKey();
-    createStates();
-    adapter.subscribeStates('*');
-    if (!pollingInterval && adapter.config.pollingInterval) {
-        if (adapter.config.pollingInterval < 10) adapter.config.pollingInterval = 10;
-        pollingInterval = setInterval(() => {
-            checkDuration('all');
-        }, adapter.config.pollingInterval * 60 * 1000);
+    if (adapter.config.apiKey) {
+        checkApiKey();
+        createStates();
+        adapter.subscribeStates('*');
+        if (!pollingInterval && adapter.config.pollingInterval) {
+            if (adapter.config.pollingInterval < 10) adapter.config.pollingInterval = 10;
+            pollingInterval = setInterval(() => {
+                checkDuration('all');
+            }, adapter.config.pollingInterval * 60 * 1000);
+        }
     }
 }

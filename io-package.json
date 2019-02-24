@@ -44,7 +44,7 @@
         ],
         "readme": "https://github.com/BuZZy1337/ioBroker.roadtraffic/blob/master/README.md",
         "loglevel": "info",
-        "type": "iot-systems"
+        "type": "misc-data"
     },
     "native": {
         "pollingInterval": 10

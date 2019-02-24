@@ -10,7 +10,7 @@
 [![NPM](https://nodei.co/npm/iobroker.roadtraffic.png?downloads=true)](https://nodei.co/npm/iobroker.roadtraffic/)
 
 ## Getting started
-First of all: You may be worried about the step "Set up Billing account & Paymentmethod" that Google may ask you for when you create the Account to get the API Key.. Dont worry! Google gives you a credit of 200$ each month.. (Visit https://cloud.google.com/maps-platform/pricing/sheet/ for more information). You can do ~40.000 requests per Month for free!
+First of all: You may be worried about the step "Set up Billing account & Paymentmethod" that Google may ask you for when you create the Account to get the API Key.. Dont worry! Google gives you a credit of 200$ each month.. (Visit https://cloud.google.com/maps-platform/pricing/sheet/ for more information). You can do ~40.000 requests per Month for free..
 
 So lets go:
 1. Go to https://cloud.google.com/maps-platform/?apis=routes and login with your Google-Account (or create a new one if you dont already have one).

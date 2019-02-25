@@ -7,7 +7,9 @@ const request = require('request');
 const path = require('path');
 const utils = require(path.join(__dirname, 'lib', 'utils'));
 const adapter = new utils.Adapter('roadtraffic');
+const objs = require('./lib/objs.js');
 let pollingInterval;
+let routes;
 
 adapter.on('unload', function (callback) {
     try {
@@ -56,6 +58,7 @@ adapter.on('ready', function () {
                 adapter.config.apiKey = decrypt('Zgfr56gFe87jJOM', adapter.config.apiKey || 'empty');
             }
         }
+        routes = adapter.config.routepoints;
         main();
     });
 });
@@ -124,15 +127,15 @@ function checkDuration(name) {
 
 function createStates() {
     try {
-        let routes = adapter.config.routepoints;
         adapter.log.debug('Routes Configured: ' + JSON.stringify(routes));
         adapter.deleteDevice('routes', function () {
             if (Array.isArray(routes) && routes.length > 0) {
                 adapter.createDevice('routes', {
                     "name": "Configured Routes"
                 }, function () {
+                    let k = 0;
                     routes.forEach(function (val, i) {
-                        let object = {
+                        let channel = {
                             type: 'channel',
                             common: {
                                 name: val.name,
@@ -143,34 +146,21 @@ function createStates() {
                                 destination: val.destination
                             }
                         };
-                        adapter.log.debug('Creating State for Route ' + i + ': ' + JSON.stringify(val));
-                        adapter.setObjectNotExists('routes.' + val.name, object, function (err) {
+                        adapter.log.debug('Creating States for Route ' + i + ': ' + JSON.stringify(val));
+                        adapter.setObjectNotExists('routes.' + val.name, channel, function (err) {
                             if (err) {
                                 adapter.log.debug('Error in creating Channel for Route: ' + err);
                             } else {
-                                let object = { type: 'state', common: { name: 'Refresh', type: 'state', role: 'button', read: true, write: true, desc: 'Refresh this Route now' }, native: {} };
-                                let distanceObj = { type: "state", common: { name: "Distance", role: "value", desc: "Distance from origin to destination", type: "number", unit: "km", read: true, write: false } };
-                                let durationObj = { type: "state", common: { name: "Normal duration without Traffic", role: "value", desc: "Normal duration without Traffic", type: "number", unit: "sec", read: true, write: false } };
-                                let durationTrafficObj = { type: "state", common: { name: "Duration with actual Traffic", role: "value", desc: "Travel duration with actual traffic", type: "number", unit: "sec", read: true, write: false } };
-                                adapter.setObjectNotExists('routes.' + val.name + '.refresh', object, function (err) {
-                                    if (err) {
-                                        adapter.log.error(err);
-                                    }
-                                });
-                                adapter.setObjectNotExists('routes.' + val.name + '.distance', distanceObj, function (err) {
-                                    if (err) {
-                                        adapter.log.error(err);
-                                    }
-                                });
-                                adapter.setObjectNotExists('routes.' + val.name + '.duration', durationObj, function (err) {
-                                    if (err) {
-                                        adapter.log.error(err);
-                                    }
-                                });
-                                adapter.setObjectNotExists('routes.' + val.name + '.durationTraffic', durationTrafficObj, function (err) {
-                                    if (err) {
-                                        adapter.log.error(err);
-                                    }
+                                objs.objectArray.forEach(function (value, i) {
+                                    adapter.setObjectNotExists('routes.' + val.name + '.' + value, objs.states[value], function (err) {
+                                        if (err) {
+                                            adapter.log.error(err);
+                                        }
+                                        k++;
+                                        if (k === objs.objectArray.length * routes.length) {
+                                            checkDuration('all');
+                                        }
+                                    });
                                 });
                             }
                         });

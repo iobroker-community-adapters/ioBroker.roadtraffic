@@ -104,9 +104,13 @@ function checkDuration(name) {
                             } else {
                                 adapter.log.debug('Google response: ' + JSON.stringify(info));
                                 try {
-                                    adapter.setState('routes.' + name + '.distance', info.rows[0].elements[0].distance.value / 1000, true);
+                                    adapter.setState('routes.' + name + '.distance', info.rows[0].elements[0].distance.value, true);
+                                    adapter.setState('routes.' + name + '.distanceText', info.rows[0].elements[0].distance.text, true);
                                     adapter.setState('routes.' + name + '.duration', info.rows[0].elements[0].duration.value, true);
+                                    adapter.setState('routes.' + name + '.durationText', info.rows[0].elements[0].duration.text, true);
                                     adapter.setState('routes.' + name + '.durationTraffic', info.rows[0].elements[0].duration_in_traffic.value, true);
+                                    adapter.setState('routes.' + name + '.durationTrafficText', info.rows[0].elements[0].duration_in_traffic.text, true);
+
                                 } catch (e) {
                                     adapter.log.error('Error setting State: ' + e);
                                 }

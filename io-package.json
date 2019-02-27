@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "roadtraffic",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "news": {
+            "0.0.2": {
+                "en": "Release of the Adapter to the latest Repository",
+                "de": "Freigabe des Adapters für das neueste Repository",
+                "ru": "Выпуск Адаптера к последнему репозиторию",
+                "pt": "Liberação do Adaptador para o Repositório Mais Recente",
+                "nl": "Release van de adapter naar de nieuwste repository",
+                "fr": "Libération de l'adaptateur dans le dernier référentiel",
+                "it": "Rilascio dell'adattatore all'ultimo repository",
+                "es": "Lanzamiento del adaptador al último repositorio.",
+                "pl": "Wydanie adaptera do najnowszego repozytorium",
+                "zh-cn": "将适配器发布到最新的存储库"
+            },
             "0.0.1": {
                 "en": "initial adapter",
                 "de": "Initiale Version",
@@ -36,6 +48,7 @@
         "subscribe": "messagebox",
         "materialize": true,
         "enabled": true,
+        "stopBeforeUpdate": true,
         "extIcon": "https://raw.githubusercontent.com/BuZZy1337/ioBroker.roadtraffic/master/admin/roadtraffic.png",
         "keywords": [
             "traffic",

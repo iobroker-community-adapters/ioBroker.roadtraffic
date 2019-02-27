@@ -1,6 +1,6 @@
 {
   "name": "iobroker.roadtraffic",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Check traffic situation with Google Maps API",
   "author": {
     "name": "BuZZy1337",

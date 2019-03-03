@@ -5,7 +5,7 @@
 
 const request = require('request');
 const path = require('path');
-const utils = require(path.join(__dirname, 'lib', 'utils'));
+const utils = require('@iobroker/adapter-core');
 const adapter = new utils.Adapter('roadtraffic');
 const objs = require('./lib/objs.js');
 let pollingInterval;

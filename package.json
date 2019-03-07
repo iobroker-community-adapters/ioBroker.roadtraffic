@@ -26,7 +26,8 @@
     "url": "https://github.com/BuZZy1337/ioBroker.roadtraffic"
   },
   "dependencies": {
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "@iobroker/adapter-core": "^1.0.3"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

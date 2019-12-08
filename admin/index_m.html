@@ -45,11 +45,18 @@
         table.table-values thead {
             background-color: #D4D4D4;
         }
+
+        table#routen tr td:first-child {
+            display: none;
+        }
     </style>
 
     <script type="text/javascript">
         var routepoints = [];
         var secret;
+        var alexaChannels = [];
+        var alexaNames = [];
+        var alexaDevices = {};
 
         function encrypt(key, value) {
             var result = '';
@@ -76,9 +83,7 @@
 
         function load2(settings, onChange) {
             if (!settings) return;
-
             routepoints = settings.routepoints || [];
-
             $('.value').each(function () {
                 var $key = $(this);
                 var id = $key.attr('id');
@@ -87,19 +92,28 @@
                         onChange();
                     });
                 } else {
-                    $key.val($key.attr('id') === 'apiKey' && settings[id] ? decrypt(secret, settings[id]) : settings[id]).change(function () {
+                    $key.val(($key.attr('id') === 'appID' || $key.attr('id') === 'appCode') && settings[id] ? decrypt(secret, settings[id]) : settings[id]).change(function () {
                         onChange();
                     }).keyup(function () {
                         onChange();
                     });
                 }
             });
-
             values2table('values', routepoints, onChange);
-
+            var $dropRoute = $('#workRoute');
+            routepoints.forEach(function (val) {
+                $('#workRoute').append('<option value="' + val.name + '"' + (settings.workRoute === val.name ? ' selected' : '') + '>' + val.name + '</option>');
+            });
+            $dropRoute.select();
             onChange(false);
             M.updateTextFields();
-
+            toggleSettings();
+            $('#alarmEnabled').change(function () {
+                toggleSettings();
+            });
+            getAlexas(settings);
+            $("input[data-name='routeid']").prop("disabled", true);
+            $("[data-name='routeid']").hide();
         }
 
 
@@ -109,60 +123,189 @@
                 var $this = $(this);
                 if ($this.attr('type') === 'checkbox') {
                     obj[$this.attr('id')] = $this.prop('checked');
-                } else if ($this.attr('id') === 'apiKey') {
+                } else if ($this.attr('id') === 'appID') {
+                    obj[$this.attr('id')] = encrypt(secret, $this.val());
+                }
+                else if ($this.attr('id') === 'appCode') {
                     obj[$this.attr('id')] = encrypt(secret, $this.val());
                 } else {
                     obj[$this.attr('id')] = $this.val();
                 }
             });
             obj.routepoints = table2values('values');
+            console.log(JSON.stringify(obj.routepoints));
+            obj.alexa = alexaDevices[$('#alexaDevice').val()];
+            makeids(obj, callback);
+        }
+
+        function toggleSettings() {
+            if ($('#alarmEnabled').prop('checked')) {
+                $('#alarmSettings').show();
+            } else {
+                $('#alarmSettings').hide();
+            }
+        }
+
+        function makeids(obj, callback) {
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i < obj.routepoints.length; i++) {
+                var result = '';
+                if (!obj.routepoints[i].routeid) {
+                    console.log('RouteID is EMPTY!!! ..');
+                    for (var k = 0; k <= 30; k++) {
+                        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                    }
+                    obj.routepoints[i].routeid = result;
+                    console.log(obj.routepoints[i].name + ' now has ID ' + obj.routepoints[i].routeid);
+                } else {
+                    console.log('RouteID is set...');
+                }
+            }
+            console.log('Finished generating IDs! ' + JSON.stringify(obj.routepoints));
             callback(obj);
         }
 
+        function getAlexas(settings) {
+            try {
+                alexaChannels = [];
+                alexaNames = [];
+                alexaDevices = {};
+                let toDo = 0;
+                let done = 0;
+                socket.emit('getObjectView', 'system', 'state', { startkey: 'alexa2.', endkey: 'alexa2.\u9999', include_docs: true }, function (err, res) {
+                    toDo = 0;
+                    done = 0;
+                    if (res.rows) {
+                        res.rows.forEach(function (val) {
+                            if (val.id.indexOf('.Player.TuneIn-Station') !== -1) {
+                                ++toDo;
+                                alexaChannels.push(val.id.split('.')[0] + '.' + val.id.split('.')[1] + '.' + val.id.split('.')[2] + '.' + val.id.split('.')[3]);
+                            }
+                        });
+                        alexaChannels.forEach(function (val) {
+                            socket.emit('getObjectView', 'system', 'device', { startkey: val, endkey: val }, function (err, res) {
+                                alexaDevices[res.rows[0].value.common.name] = res.rows[0].id;
+                                alexaNames.push(res.rows[0].value.common.name);
+                                ++done;
+                                if (done === toDo) {
+                                    alexaNames.sort();
+                                    console.log('Finished looking for Alexas: ' + JSON.stringify(alexaNames) + ' ' + JSON.stringify(alexaDevices));
+                                    updateAlexas(settings);
+                                }
+                            });
+                        });
+                    }
+                });
+            } catch (e) {
+                console.error('Error in getting AlexaDevices.. ' + e);
+            }
+
+            function updateAlexas(settings) {
+                var $dropAlexa = $('#alexaDevice');
+                alexaNames.forEach(function (val) {
+                    $('#alexaDevice').append('<option value="' + val + '"' + (settings.alexaDevice === val ? ' selected' : '') + '>' + val + '</option>');
+                });
+                $dropAlexa.select();
+            }
+        }
     </script>
 </head>
 
 <body>
     <div class="m adapter-container">
-        <div class="row">
-            <div class="row">
-                <div class="input-field col s3 m3 l3">
-                    <img src="roadtraffic.png" class="logo">
+        <div class="row" style="height: 100%;">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s6"><a href="#tab-main" class="translate active">Main settings</a></li>
+                    <li class="tab col s6"><a href="#tab-alarm" class="translate active" id="alarm">Wakeup-Alarm</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="tab-main" class="col s12 page">
+                <div class="row">
+                    <div class="input-field col s3 m3 l3">
+                        <img src="roadtraffic.png" class="logo">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m1 l1">
+                        <input class="value" id="pollingInterval" type="number" />
+                        <label for="pollingInterval" class="translate">Pollinginterval (in Minutes)</label>
+                    </div>
+                    <div class="input-field col s12 m5 l5">
+                        <input id="appID" class="value" type="text" />
+                        <label for="appID" class="translate">HERE App ID</label>
+                    </div>
+                    <div class="input-field col s12 m5 l5">
+                        <input id="appCode" class="value" type="text" />
+                        <label for="appCode" class="translate">HERE App Code</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12" id="values">
+                        <a class="btn-floating waves-effect waves-light blue table-button-add"
+                            style="margin-bottom: 10;"><i class="material-icons">add</i></a>
+                        <div class="table-values-div">
+                            <table id="routen" class="table-values highlight">
+                                <thead>
+                                    <tr>
+                                        <th data-name="routeid" class="translate">ID</th>
+                                        <th data-name="name" class="translate" style="width: 10%">Name</th>
+                                        <th data-name="origin" class="translate">Origin</th>
+                                        <th data-name="destination" class="translate">Destination</th>
+                                        <th data-buttons="delete" style="width: 40px"></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col s12 m1 l1">
-                    <input class="value" id="pollingInterval" type="number" />
-                    <label for="pollingInterval" class="translate">Pollinginterval (in Minutes)</label>
+            <!-- ALARM CLOCK TAB -->
+            <div id="tab-alarm" class="col s12 page">
+                <div class="row">
+                    <div class="input-field col s3 m3 l3">
+                        <img src="roadtraffic.png" class="logo">
+                    </div>
                 </div>
-                <div class="input-field col s12 m11 l11">
-                    <input id="apiKey" class="value" type="text" />
-                    <label for="apiKey" class="translate">Google Maps API Key</label>
-                    <!-- <span class="translate">Google Maps API Key</span> -->
+                <div class="row">
+                    <span class="translate">(DONT USE THIS FUNCTION YET!!!!) You can set the Alarm here. The Adapter
+                        will trigger the choosen Alarm when
+                        it is time to get up so you will not be late at work.</span>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col s12" id="values">
-                    <a class="btn-floating waves-effect waves-light blue table-button-add" style="margin-bottom: 10;"><i
-                            class="material-icons">add</i></a>
-                    <div class="table-values-div">
-                        <table class="table-values highlight">
-                            <thead>
-                                <tr>
-                                    <th data-name="name" class="translate">Name</th>
-                                    <th data-name="origin" class="translate">Origin</th>
-                                    <th data-name="destination" class="translate">Destination</th>
-                                    <th data-buttons="delete" style="width: 40px"></th>
-                                </tr>
-                            </thead>
-                        </table>
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        <input class="value" id="alarmEnabled" type="checkbox" />
+                        <label for="alarmEnabled" class="translate">Enable Alarm-Clock feature</label>
+                    </div>
+                </div>
+                <div id="alarmSettings">
+                    <div class="row">
+                        <div class="input-field col s12 m3 l3">
+                            <select class="value" id="workRoute"></select>
+                            <label class="translate" for="workRoute">Workroute</label>
+                        </div>
+                        <div class="input-field col s12 m3 l3">
+                            <select class="value" id="alexaDevice"></select>
+                            <label class="translate" for="alexaDevice">Alexa-Device</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m3 l3">
+                            <input class="value" id="stationId" />
+                            <label for="stationId" class="translate">Tune-In StationID</label>
+                        </div>
+                        <div class="col s12 m3 l3">
+                            <input class="value" id="alarmVolume" />
+                            <label for="alarmVolume" class="translate">Alarmvolume (0-100)</label>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
+    <!-- ALARM CLOCK TAB END -->
 </body>
 
 </html>

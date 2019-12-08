@@ -1,7 +1,7 @@
 {
   "name": "iobroker.roadtraffic",
-  "version": "0.0.2",
-  "description": "Check traffic situation with Google Maps API",
+  "version": "0.1.0",
+  "description": "Check traffic situation with HERE.com API",
   "author": {
     "name": "BuZZy1337",
     "email": "buzzy1337@outlook.de"
@@ -17,7 +17,7 @@
   "keywords": [
     "ioBroker",
     "traffic",
-    "Google Maps",
+    "Maps",
     "Smart Home",
     "home automation"
   ],

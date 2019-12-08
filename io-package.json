@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "roadtraffic",
-        "version": "0.0.2",
+        "version": "0.1.0",
         "news": {
+            "0.1.0": {
+                "en": "Changed Adapter to use HERE.com instead of Google</br>READ THE NEW README BEFORE UPDATE!!",
+                "de": "Der Adapter wurde geändert, um HERE.com anstelle von Google zu verwenden. </br> LESEN SIE DIE NEUE README VOR DEM UPDATE !!",
+                "ru": "Изменен адаптер для использования HERE.com вместо Google </br> ПРОЧИТАЙТЕ НОВОЕ README ПЕРЕД ОБНОВЛЕНИЕМ !!",
+                "pt": "Adaptador alterado para usar o HERE.com em vez do Google </br> LEIA O NOVO LEIA-ME ANTES DE ATUALIZAR !!",
+                "nl": "Adapter gewijzigd om HERE.com te gebruiken in plaats van Google </br> LEES HET NIEUWE LEESME VOOR UPDATE !!",
+                "fr": "Changement de l'adaptateur pour utiliser HERE.com au lieu de Google </br> LISEZ LE NOUVEAU LISEZMOI AVANT LA MISE À JOUR !!",
+                "it": "Modificato l'adattatore per utilizzare HERE.com anziché Google </br> LEGGI IL NUOVO README PRIMA DELL'AGGIORNAMENTO !!",
+                "es": "Adaptador modificado para usar HERE.com en lugar de Google </br> ¡LEA EL NUEVO LÉAME ANTES DE ACTUALIZAR!",
+                "pl": "Zmieniono adapter, aby używał TUTAJ.com zamiast Google </br> PRZECZYTAJ NOWY PLIK README !!",
+                "zh-cn": "已将适配器更改为使用HERE.com而不是Google </br>在更新前阅读新的自述文件！！"
+            },
             "0.0.2": {
                 "en": "Release of the Adapter to the latest Repository",
                 "de": "Freigabe des Adapters für das neueste Repository",
@@ -53,7 +65,12 @@
         "keywords": [
             "traffic",
             "maps",
-            "route"
+            "route",
+            "verkehr",
+            "wecker",
+            "stau",
+            "google",
+            "arbeit"
         ],
         "readme": "https://github.com/BuZZy1337/ioBroker.roadtraffic/blob/master/README.md",
         "loglevel": "info",
@@ -62,8 +79,30 @@
     "native": {
         "pollingInterval": 10
     },
-    "objects": [],
+    "objects": [
+        {
+            "_id": "_design/roadtraffic",
+            "language": "javascript",
+            "views": {
+                "listRouteIDs": {
+                    "map": "function(doc) {\n  if (typeof doc.native !== 'undefined' && typeof doc.common !== 'undefined' && doc.native.routeid && doc.common.name) {\n   emit(doc._id, {[doc.native.routeid]:doc.common.name});\n  }\n}"
+                }
+            }
+        }
+    ],
     "instanceObjects": [
+        {
+            "_id": "routes",
+            "type": "device",
+            "common": {
+                "name":  "Configured Routes",
+                "type":  "device",
+                "role":  "",
+                "read":  true,
+                "write": false,
+                "def":   ""
+            }
+        },
         {
             "_id": "refresh",
             "type": "state",

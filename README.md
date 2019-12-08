@@ -17,28 +17,28 @@ Feel free to create some feature-requests here on Github - just open an Issue fo
 So lets go:
 1. Go to https://developer.here.com/sign-up?create=Freemium-Basic&keepState=true&step=account and create a HERE.com Free Developer-Account (Freemium).
 
-![Readme1](img/Readme1.png)
+![Here1](img/Here1.png)
 
 2. Make sure that Freemium is selected and complete the form on the left side.. (First name, Last name, email,..)
 
-![Readme2](img/Readme2.png)
+![Here2](img/Here2.png)
 
 3. Click on Register for HERE Account ... and dont forget to tick the Checkbox (Aggree to the Service Terms etc..).
 
-![Readme3](img/Readme3.png)
+![Here3](img/Here3.png)
 
 4. One more time - agree to the Terms and Conditions and click the "Start Coding" Button.
 
-![Readme4](img/Readme4.png)
+![Here4](img/Here4.png)
 
 5. At the next page you are already on your HERE.com Dashboard. Look for the REST & XYZ HUB API/CLI and click on "Generate App ID and App Code".
 
-![Readme5](img/Readme5.png)
+![Here5](img/Here5.png)
 
 6. Open the Instancesettings of the roadtraffic Adapter in ioBroker and copy the App ID and the App Code into the fields.
 Click the Plus icon and create your first Route..
 
-![Readme6](img/Readme6.png)
+![Here6](img/Here6.png)
 
 
 After you entered all informations to the config dialog click "Save & Close".

@@ -46,6 +46,10 @@ The Adapter should now restart and you are ready to go!
 
 
 ## Changelog
+### 0.1.1 (2019-12-13)
+* (BuZZy1337) HERE.com changed the Authentication.
+* (BuZZy1337) Prepare for Alarm.. (NOT WORKING YET!!! - But needed to push this version because of authentication changes))
+
 ### 0.1.0 (2019-12-08)
 * (BuZZy1337) Using HERE.com instead of Google API (READ THE UPDATED README!!)
 

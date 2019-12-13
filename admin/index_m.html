@@ -92,7 +92,7 @@
                         onChange();
                     });
                 } else {
-                    $key.val(($key.attr('id') === 'appID' || $key.attr('id') === 'appCode') && settings[id] ? decrypt(secret, settings[id]) : settings[id]).change(function () {
+                    $key.val($key.attr('id') === 'apiKEY' && settings[id] ? decrypt(secret, settings[id]) : settings[id]).change(function () {
                         onChange();
                     }).keyup(function () {
                         onChange();
@@ -123,10 +123,7 @@
                 var $this = $(this);
                 if ($this.attr('type') === 'checkbox') {
                     obj[$this.attr('id')] = $this.prop('checked');
-                } else if ($this.attr('id') === 'appID') {
-                    obj[$this.attr('id')] = encrypt(secret, $this.val());
-                }
-                else if ($this.attr('id') === 'appCode') {
+                } else if ($this.attr('id') === 'apiKEY') {
                     obj[$this.attr('id')] = encrypt(secret, $this.val());
                 } else {
                     obj[$this.attr('id')] = $this.val();
@@ -234,12 +231,8 @@
                         <label for="pollingInterval" class="translate">Pollinginterval (in Minutes)</label>
                     </div>
                     <div class="input-field col s12 m5 l5">
-                        <input id="appID" class="value" type="text" />
-                        <label for="appID" class="translate">HERE App ID</label>
-                    </div>
-                    <div class="input-field col s12 m5 l5">
-                        <input id="appCode" class="value" type="text" />
-                        <label for="appCode" class="translate">HERE App Code</label>
+                        <input id="apiKEY" class="value" type="text" />
+                        <label for="apiKEY" class="translate">HERE Api Key</label>
                     </div>
                 </div>
                 <div class="row">

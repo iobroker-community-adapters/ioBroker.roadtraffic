@@ -8,13 +8,19 @@ const path = require('path');
 const utils = require('@iobroker/adapter-core');
 const adapter = new utils.Adapter('roadtraffic');
 const objs = require('./lib/objs.js');
+const FORBIDDEN_CHARS = /[\][*,;'"`<>\\?]/g;
+
 let pollingInterval;
 let routes;
-let IDObject = {};
-let configuredIds = [];
-let currentObjsArray;
-let currentObjs;
-const FORBIDDEN_CHARS = /[\][*,;'"`<>\\?]/g;
+let configuredIdsArray = [];    //-- [routeid,..] of configured routes (filled by getChannels();)
+let configuredIdsObject = {};   //-- {routeid: name,..} of configured routes (filled by getChannels();)
+let currentIdsArray = [];       //-- [routeid,..] of actual existing route objects (filled by getChannels();)
+let currentIdsObject = {};      //-- {routeid: name,..} of actual existing route objects (filled by getChannels();)
+let toDelete = [];              //-- [routeid,..] of routes that have to be deleted (filled by checkChannels();)
+let toUpdate = [];              //-- [routeid,..] of routes that have to be updated (filled by checkChannels();)
+let okayIds = [];               //-- [routeid,..] of routes that we dont have to take care about (filled by checkChannels();)
+let toCreate = [];              //-- [routeid,..] of routes that have to be created (filled by checkChannels();)
+let device = {};
 
 adapter.on('unload', function (callback) {
     try {
@@ -36,8 +42,8 @@ adapter.on('stateChange', function (id, state) {
     if (!state || state.ack) return;
     var comp = id.split('.');
     if (comp[4] === 'refresh') {
-        adapter.log.debug('Route Refresh triggered: ' + comp[3]);
-        checkDuration(comp[3]);
+        adapter.log.debug('Route Refresh triggered: ' + comp[2]);
+        checkDuration(comp[2]);
     }
     else if (comp[2] === 'refresh') {
         adapter.log.debug('Route Refresh triggered (ALL)');
@@ -57,26 +63,19 @@ adapter.on('message', function (msg) {
 
 adapter.on('ready', function () {
     adapter.getForeignObject('system.config', (err, obj) => {
-        if (adapter.config.appID && adapter.config.appCode) {
+        if (adapter.config.apiKEY) {
             if (obj && obj.native && obj.native.secret) {
-                adapter.config.appID = decrypt(obj.native.secret, adapter.config.appID || 'empty');
-                adapter.config.appCode = decrypt(obj.native.secret, adapter.config.appCode || 'empty');
+                adapter.config.apiKEY = decrypt(obj.native.secret, adapter.config.apiKEY || 'empty');
             } else {
-                adapter.config.appID = decrypt('Zgfr56gFe87jJOM', adapter.config.appID || 'empty');
-                adapter.config.appCode = decrypt('Zgfr56gFe87jJOM', adapter.config.appCode || 'empty');
+                adapter.config.apiKEY = decrypt('Zgfr56gFe87jJOM', adapter.config.apiKEY || 'empty');
             }
         }
         routes = adapter.config.routepoints;
-        if (Array.isArray(routes) && routes.length > 0) {
-            routes.forEach(function (val, i) {
-                configuredIds.push(val.routeid);
-                if (i === routes.length - 1) {
-                    main();
-                }
-            });
-        } else {
-            main();
+        if (!adapter.config.apiKEY) {
+            adapter.log.error('https://github.com/BuZZy1337/ioBroker.roadtraffic#getting-started');
+            adapter.log.error('You need to set the Api KEY in the instance settings!');
         }
+        main();
     });
 });
 
@@ -89,28 +88,242 @@ function decrypt(key, value) {
     return result;
 }
 
+function getChannels() {  // Fill arrays and objects for comparing configured vs existing routes
+    adapter.log.debug('Starting getChannels()..');
+    adapter.getObjectView('roadtraffic', 'listRouteIDs',
+        { startkey: 'roadtraffic.' + adapter.instance + '.', endkey: 'roadtraffic.' + adapter.instance + '.\u9999' },
+        function (err, doc) {
+            if (!err && doc) {
+                try {
+                    if (Array.isArray(doc.rows) && doc.rows.length > 0) {
+                        adapter.log.debug('ObjectView got: ' + JSON.stringify(doc));
+                        // Filling array and obj with existing routes
+                        doc.rows.forEach(function (val, i) {
+                            adapter.log.debug('Pushed ' + JSON.stringify(val.value) + ' to currentIdsArray!');
+                            currentIdsArray.push(val.value);
+                        });
+                        currentIdsObject = Object.assign({}, ...currentIdsArray);
+                        adapter.log.debug('currentIdsObject now: ' + JSON.stringify(currentIdsObject));
+                        currentIdsArray = Object.keys(currentIdsObject);
+                        adapter.log.debug('currentIdsArray now: ' + JSON.stringify(currentIdsArray));
+                        // Continue with generating the same stuff for configured routes
+                        routes.forEach(function (val, i) {
+                            configuredIdsObject[val.routeid] = val.name;
+                        });
+                        adapter.log.debug('configuredIdsObject now: ' + JSON.stringify(configuredIdsObject));
+                        configuredIdsArray = Object.keys(configuredIdsObject);
+                        adapter.log.debug('configuredIdsArray now: ' + JSON.stringify(configuredIdsArray));
+                        adapter.log.debug('getChannels() finished..');
+                        checkChannels(1);
+                    } else {
+                        adapter.log.debug('getChannels() got nothing..');
+                        routes.forEach(function (val, i) {
+                            configuredIdsObject[val.routeid] = val.name;
+                        });
+                        adapter.log.debug('configuredIdsObject now: ' + JSON.stringify(configuredIdsObject));
+                        configuredIdsArray = Object.keys(configuredIdsObject);
+                        adapter.log.debug('configuredIdsArray now: ' + JSON.stringify(configuredIdsArray));
+                        checkChannels(1);
+                    }
+                } catch (e) {
+                    adapter.log.error('Error in getChannels(): ' + e);
+                }
+            }
+        });
+}
+
+let checkCount = 0;
+let delCount = 0;
+let updateCount = 0;
+let createdChannelCount = 0;
+let createdStateCount = 0;
+
+function checkChannels(arg) {
+    /* 
+        arg=1: decide what we have to do
+        arg=2: delete channels
+        arg=3: update channels
+        arg=4: create channels
+    */
+    try {
+        switch (arg) {
+            case 1:
+                adapter.log.debug('checkChannels(1) called..');
+                if (Array.isArray(currentIdsArray) && currentIdsArray.length > 0) {
+                    adapter.log.debug('We have to check ' + currentIdsArray.length + ' Routes..');
+                    for (let [key, value] of Object.entries(currentIdsObject)) {
+                        adapter.log.debug('Checking Route: ' + value + ' (ID: ' + key + ')');
+                        adapter.getObject(value, function (err, obj) {
+                            checkCount++;
+                            if (!err) {
+                                adapter.log.debug('Got Object of Route: ' + value + ' - ' + JSON.stringify(obj));
+                                if (configuredIdsArray.indexOf(obj.native.routeid) === -1) {
+                                    adapter.log.debug('Route ' + currentIdsObject[obj.native.routeid] + ' has to be deleted - because deleted in config!');
+                                    toDelete.push(obj.native.routeid);
+                                }
+                                else if (obj.common.name !== configuredIdsObject[obj.native.routeid]) {
+                                    adapter.log.debug('Route ' + currentIdsObject[obj.native.routeid] + ' has to be recreated - because name was changed!');
+                                    toDelete.push(obj.native.routeid);
+                                }
+                                else if (obj.native.origin !== device[obj.native.routeid].native.origin || obj.native.destination !== device[obj.native.routeid].native.destination) {
+                                    adapter.log.debug('Route ' + currentIdsObject[obj.native.routeid] + ' has to be updated - because origin or destination changed!');
+                                    let index = toCreate.indexOf(obj.native.routeid);
+                                    if (index > -1) {
+                                        toCreate.splice(index, 1);
+                                    }
+                                    toUpdate.push(obj.native.routeid);
+                                }
+                                else {
+                                    adapter.log.debug('Route ' + currentIdsObject[obj.native.routeid] + ' hast not changed..');
+                                    let index = toCreate.indexOf(obj.native.routeid);
+                                    if (index > -1) {
+                                        toCreate.splice(index, 1);
+                                    }
+                                    okayIds.push(obj.native.routeid);
+                                }
+                                if (checkCount === currentIdsArray.length) {
+                                    adapter.log.debug('That was the last Object..');
+                                    if (toDelete.length > 0) {
+                                        adapter.log.debug('We have to delete something...');
+                                        checkChannels(2);
+                                    } else if (toUpdate.length > 0) {
+                                        adapter.log.debug('We have to update something..');
+                                        checkChannels(3);
+                                    } else {
+                                        adapter.log.debug('We dont have to do any changes..');
+                                        checkChannels(4);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    adapter.log.debug('Seems like we dont have any routes yet...');
+                    checkChannels(4);
+                }
+                break;
+            case 2:
+                adapter.log.debug('checkChannels(2) called.. Starting to delete devices..');
+                toDelete.forEach(function (val, i) {
+                    adapter.log.debug('Trying to delete ' + currentIdsObject[val]);
+                    adapter.deleteDevice(currentIdsObject[val], function (err) {
+                        delCount++;
+                        adapter.log.debug('Deleted ' + currentIdsObject[val] + ' ...');
+                        if (delCount === toDelete.length) {
+                            adapter.log.debug('That was the last route...')
+                            if (toUpdate.length > 0) {
+                                checkChannels(3);
+                            } else {
+                                checkChannels(4);
+                            }
+                        }
+                    });
+                });
+                break;
+            case 3:
+                adapter.log.debug('checkChannels(3) called.. Starting to update devices..');
+                toUpdate.forEach(function (val, i) {
+                    updateCount++;
+                    adapter.extendObject(currentIdsObject[val], device[val], function (err) {
+                        if (err) {
+                            adapter.log.debug('Error in updating Channel for Route: ' + err);
+                        } else {
+                            adapter.log.debug('Update Route successful!');
+                            if (updateCount === toUpdate.length) {
+                                checkChannels(4);
+                            }
+                        }
+                    });
+                });
+                break;
+            case 4:
+                if (toCreate.length > 0) {
+                    let channelstoCreate = (toCreate.length * objs.channelsArray.length);
+                    let statestoCreate = (toCreate.length * objs.statesArray.length) + (toCreate.length * objs.alarmArray.length * objs.daysArray.length);
+                    adapter.log.debug('checkChannels(4) called.. Starting to create devices..');
+                    toCreate.forEach(function (val, i) {
+                        try {
+                            adapter.log.debug('Creating ' + device[val].common.name);
+                            adapter.setObjectNotExists(device[val].common.name, device[val], function (err) {
+                                if (err) {
+                                    adapter.log.debug('Error in creating Device for Route: ' + err);
+                                } else {
+                                    adapter.log.debug('Success: Created Device ' + device[val].common.name);
+                                    objs.channelsArray.forEach(function (value, i) {
+                                        adapter.setObjectNotExists(device[val].common.name + '.' + value, objs.channels[value], function (err) {
+                                            if (!err) {
+                                                adapter.log.debug('Created channel ' + device[val].common.name + '.' + value);
+                                                createdChannelCount++;
+                                                if (value === 'route') {
+                                                    objs.statesArray.forEach(function (value, i) {
+                                                        adapter.setObjectNotExists(device[val].common.name + '.route.' + value, objs.states[value], function (err) {
+                                                            if (err) {
+                                                                adapter.log.error(err);
+                                                            }
+                                                            createdStateCount++;
+                                                            adapter.log.debug('Created State ' + device[val].common.name + '.route.' + value);
+                                                            if (createdChannelCount === channelstoCreate &&
+                                                                createdStateCount === statestoCreate) {
+                                                                adapter.log.debug('Created last State..');
+                                                                checkDuration('all');
+                                                            }
+                                                        });
+                                                    });
+                                                } else if (objs.daysArray.indexOf(value) !== -1) {
+                                                    objs.alarmArray.forEach(function (val2, i) {
+                                                        adapter.setObjectNotExists(device[val].common.name + '.' + value + '.' + val2, objs.alarm[val2], function (err) {
+                                                            if (err) {
+                                                                adapter.log.error(err);
+                                                            }
+                                                            createdStateCount++;
+                                                            adapter.log.debug('Created State ' + device[val].common.name + '.' + value + '.' + val2);
+                                                            if (createdChannelCount === channelstoCreate &&
+                                                                createdStateCount === statestoCreate) {
+                                                                adapter.log.debug('Created last State..');
+                                                                checkDuration('all');
+                                                            }
+                                                        });
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                        } catch (e) {
+                            adapter.log.error('Error in checkChannels(4): ' + e);
+                        }
+                    });
+                } else {
+                    adapter.log.debug('Everything done.. Getting fresh Data..');
+                    checkDuration('all');
+                }
+        }
+    } catch (e) {
+        adapter.log.error('Error in checkChannels(): ' + e);
+    }
+}
 
 function checkDuration(name) {
-    if (!adapter.config.appID || !adapter.config.appCode) {
-        adapter.log.error('You need to set the APP ID and APP Code in the instance settings!');
+    if (!adapter.config.apiKEY) {
+        adapter.log.error('https://github.com/BuZZy1337/ioBroker.roadtraffic#getting-started');
+        adapter.log.error('You need to set the Api KEY in the instance settings!');
         return;
     }
     if (name === 'all') {
-        adapter.getChannelsOf('routes', function (err, channels) {
-            if (err) {
-                adapter.log.error('Error getting Route Channels: ' + err);
-                return;
-            }
-            channels.forEach(function (val) {
-                checkDuration(val.common.name);
-            });
+        adapter.log.debug('Refreshing all routes.. (' + JSON.stringify(configuredIdsArray) + ')');
+        configuredIdsArray.forEach(function (val, i) {
+            adapter.log.debug('Calling refresh of ' + configuredIdsObject[val]);
+            checkDuration(configuredIdsObject[val]);
         });
     } else {
-        adapter.getObject('routes.' + name, function (err, obj) {
+        adapter.log.debug('Refreshing ' + name);
+        adapter.getObject(name, function (err, obj) {
+            adapter.log.debug('Checking obj: ' + JSON.stringify(obj));
             if (err) return;
             const origin = encodeURIComponent(obj.native.originGeo);
             const destination = encodeURIComponent(obj.native.destinationGeo)
-            const link = 'https://route.api.here.com/routing/7.2/calculateroute.json?app_id=' + adapter.config.appID + '&app_code=' + adapter.config.appCode + '&waypoint0=' + origin + '&waypoint1=' + destination + '&jsonAttributes=41&mode=fastest;car;traffic:enabled;&language=de-de';
+            const link = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + adapter.config.apiKEY + '&waypoint0=' + origin + '&waypoint1=' + destination + '&jsonAttributes=41&mode=fastest;car;traffic:enabled;&language=de-de';
             request(link, function (error, response, body) {
                 if (!error) {
                     try {
@@ -121,16 +334,18 @@ function checkDuration(name) {
                             } else {
                                 adapter.log.debug('HERE response: ' + JSON.stringify(info));
                                 try {
-                                    adapter.setState('routes.' + name + '.distance', info.response.route[0].summary.distance, true);
-                                    adapter.setState('routes.' + name + '.distanceText', (info.response.route[0].summary.distance / 1000).toFixed(2).toString() + ' km', true);
-                                    adapter.setState('routes.' + name + '.duration', info.response.route[0].summary.baseTime, true);
-                                    adapter.setState('routes.' + name + '.durationText', secondsToTime(info.response.route[0].summary.baseTime), true);
-                                    adapter.setState('routes.' + name + '.durationTraffic', info.response.route[0].summary.trafficTime, true);
-                                    adapter.setState('routes.' + name + '.durationTrafficText', secondsToTime(info.response.route[0].summary.trafficTime), true);
+                                    adapter.setState(name + '.route.distance', info.response.route[0].summary.distance, true);
+                                    adapter.setState(name + '.route.distanceText', (info.response.route[0].summary.distance / 1000).toFixed(2).toString() + ' km', true);
+                                    adapter.setState(name + '.route.duration', info.response.route[0].summary.baseTime, true);
+                                    adapter.setState(name + '.route.durationText', secondsToTime(info.response.route[0].summary.baseTime), true);
+                                    adapter.setState(name + '.route.durationTraffic', info.response.route[0].summary.trafficTime, true);
+                                    adapter.setState(name + '.route.durationTrafficText', secondsToTime(info.response.route[0].summary.trafficTime), true);
                                 } catch (e) {
                                     adapter.log.error('Error setting State: ' + e);
                                 }
                             }
+                        } else {
+                            adapter.log.error('Unable to get Data from Here.. ' + JSON.stringify(response))
                         }
                     }
                     catch (e) {
@@ -140,151 +355,12 @@ function checkDuration(name) {
                     adapter.log.error('Error in checkDuration(): ' + error);
                 }
             });
-
         });
     }
 }
-
-
-function checkChannels() {
-    let toDelete = [];
-    adapter.getObjectView('roadtraffic', 'listRouteIDs',
-        { startkey: 'roadtraffic.' + adapter.instance + '.', endkey: 'roadtraffic.' + adapter.instance + '.\u9999' },
-        function (err, doc) {
-            if (!err && doc) {
-                currentObjs = doc.rows;
-                currentObjsArray = [];
-                currentObjs.forEach(function (val, i) {
-                    currentObjsArray.push(val.value);
-                });
-                if (currentObjs) {
-                    adapter.log.debug('ObjectView got: ' + JSON.stringify(currentObjsArray));
-                }
-                currentObjs = Object.assign({}, ...currentObjsArray);
-                let count = 0;
-                if (currentObjsArray.length !== 0) {
-                    for (let [key, value] of Object.entries(currentObjs)) {
-                        toDelete.push(key);
-                        adapter.log.debug(JSON.stringify(routes));
-                        adapter.log.debug('Getting Object of ID: ' + key + ' - Name: ' + value);
-                        adapter.getObject('routes.' + value, function (err, obj) {
-                            count++;
-                            if (!err) {
-                                adapter.log.debug('Got Object: ' + JSON.stringify(obj));
-                                if (configuredIds.indexOf(obj.native.routeid) === -1) {
-                                    adapter.deleteChannel('routes', value, function (err) {
-                                        if (!err) {
-                                            adapter.log.debug('Deleted ' + value + ' ... Running trough again!');
-                                            checkChannels();
-                                        }
-                                    });
-                                    return;
-                                }
-                            }
-                            if (count === currentObjsArray.length) {
-                                adapter.log.debug('That was the last Object.. Creating states..');
-                                createStates();
-                            }
-                        });
-                    }
-                } else {
-                    adapter.log.debug('No Objects created yet...');
-                    createStates();
-                }
-            }
-        });
-}
-
-let channel = {};
-
-function createStates() {
-    try {
-        adapter.log.debug('Routes Configured: ' + JSON.stringify(routes));
-        if (Array.isArray(routes) && routes.length > 0) {
-            let k = 0;
-            routes.forEach(function (val, i) {
-                channel[val.routeid] = {
-                    type: 'channel',
-                    common: {
-                        name: val.name.replace(FORBIDDEN_CHARS, '_'),
-                        desc: val.name + ' Route'
-                    },
-                    native: {
-                        routeid: val.routeid,
-                        origin: val.origin,
-                        originGeo: val.originGeo,
-                        destination: val.destination,
-                        destinationGeo: val.destinationGeo
-                    }
-                };
-                IDObject[val.routeid] = {};
-                IDObject[val.routeid]['name'] = val.name;
-                IDObject[val.routeid]['origin'] = val.origin;
-                IDObject[val.routeid]['destination'] = val.destination;
-                IDObject[val.routeid]['channel'] = channel[val.routeid];
-                if (currentObjs[val.routeid]) {
-                    adapter.log.debug('Trying to get Object ' + currentObjs[val.routeid]);
-                    adapter.getObject('routes.' + currentObjs[val.routeid], function (err, obj) {
-                        if (obj.common.name !== IDObject[obj.native.routeid].name) {
-                            adapter.deleteChannel('routes', currentObjs[val.routeid], function (err) {
-                                if (!err) {
-                                    adapter.log.debug('Deleted ' + currentObjs[val.routeid] + ' ... Running trough again!');
-                                    checkChannels();
-                                }
-                            });
-                            return;
-                        } else if (obj.native.origin !== IDObject[obj.native.routeid].origin ||
-                            obj.native.destination !== IDObject[obj.native.routeid].destination) {
-                            adapter.log.debug(obj.common.name + ' was changed in the settings!!');
-                            adapter.extendObject('routes.' + currentObjs[val.routeid], channel[val.routeid], function (err) {
-                                if (err) {
-                                    adapter.log.debug('Error in updating Channel for Route: ' + err);
-                                } else {
-                                    adapter.log.debug('Update Route successful!');
-                                    checkDuration(currentObjs[val.routeid]);
-                                }
-                            });
-                        } else {
-                            adapter.log.debug(obj.common.name + ' has not been changed..');
-                        }
-                    });
-                } else {
-                    adapter.log.debug('Creating States for Route ' + i + ': ' + JSON.stringify(val));
-                    setTimeout(function () {
-                        adapter.setObjectNotExists('routes.' + val.name.replace(FORBIDDEN_CHARS, '_'), channel[val.routeid], function (err) {
-                            if (err) {
-                                adapter.log.debug('Error in creating Channel for Route: ' + err);
-                            } else {
-                                adapter.log.debug('Created Channel routes.' + val.name.replace(FORBIDDEN_CHARS, '_'));
-                                k = 0;
-                                objs.objectArray.forEach(function (value, i) {
-                                    adapter.setObjectNotExists('routes.' + val.name.replace(FORBIDDEN_CHARS, '_') + '.' + value, objs.states[value], function (err) {
-                                        if (err) {
-                                            adapter.log.error(err);
-                                        }
-                                        k++;
-                                        adapter.log.debug('Created State routes.' + val.name.replace(FORBIDDEN_CHARS, '_') + '.' + value);
-                                        if (k === objs.objectArray.length) {
-                                            adapter.log.debug('That was the last state... Getting fresh data from HERE..');
-                                            checkDuration(val.name.replace(FORBIDDEN_CHARS, '_'));
-                                        }
-                                    });
-                                });
-                            }
-                        })
-
-                    }, 1000);
-                }
-            });
-        }
-    } catch (e) {
-        adapter.log.error('Error in createStates(): ' + e)
-    }
-}
-
 
 function checkApiKey() {
-    const link = 'https://route.api.here.com/routing/7.2/calculateroute.json?app_id=' + adapter.config.appID + '&app_code=' + adapter.config.appCode + '&waypoint0=geo!52.5170365,13.3888599&waypoint1=geo!52.5170365,13.3888599&jsonAttributes=41&mode=fastest;car;traffic:enabled;&language=de-de';
+    const link = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + adapter.config.apiKEY + '&waypoint0=geo!52.5170365,13.3888599&waypoint1=geo!52.5170365,13.3888599&mode=fastest;car;traffic:enabled;&language=de-de';
     request(link, function (error, response, body) {
         if (!error) {
             try {
@@ -294,11 +370,11 @@ function checkApiKey() {
                     if (info.details) adapter.log.error('Additional Error: ' + info.details);
                     adapter.setState('info.connection', false, true);
                 } else {
-                    adapter.log.debug('API Key pair looks good! ..');
+                    adapter.log.debug('API Key looks good! ..');
                     adapter.setState('info.connection', true, true);
                     if (Array.isArray(routes) && routes.length > 0) {
                         adapter.log.debug('Starting to get coordinates of Routepoints..');
-                        geoCode(0, checkChannels);
+                        geoCode(0, getChannels);
                     } else {
                         adapter.log.error('You need to create Routes in the instance settings!!');
                     }
@@ -308,7 +384,7 @@ function checkApiKey() {
                 adapter.log.error('API Key check failed: ' + e);
             }
         } else {
-            adapter.log.error('Error in checkApiKey(): ' + error);
+            adapter.log.error('Error in checkApiKey() request: ' + error);
         }
     });
 }
@@ -319,13 +395,13 @@ let routePoint;
 function geoCode(num, cb) {
     let type;
     if (Array.isArray(routes) && routes.length > 0 && run <= routes.length * 2) {
-        if (run == 0 || run % 2 === 0) {
+        if (run === 0 || run % 2 === 0) {
             type = 'origin';
         } else {
             type = 'destination';
         }
         routePoint = routes[num][type];
-        const link = 'https://geocoder.api.here.com/6.2/geocode.json?app_id=' + adapter.config.appID + '&app_code=' + adapter.config.appCode + '&searchtext=' + encodeURIComponent(routePoint);
+        const link = 'https://geocoder.ls.hereapi.com/6.2/geocode.json?apikey=' + adapter.config.apiKEY + '&searchtext=' + encodeURIComponent(routePoint);
         request(link, function (error, response, body) {
             if (!error) {
                 try {
@@ -341,7 +417,27 @@ function geoCode(num, cb) {
                             geoCode(run == 0 || run % 2 !== 0 ? num : num + 1, cb);
                         } else {
                             adapter.log.debug('Geocoded ' + run + ' waypoints.. That was the last one..');
-                            cb();
+                            if (Array.isArray(routes) && routes.length > 0) {
+                                routes.forEach(function (val, i) {
+                                    toCreate.push(val.routeid);
+                                    device[val.routeid] = {
+                                        type: 'device',
+                                        common: {
+                                            name: val.name.replace(FORBIDDEN_CHARS, '_'),
+                                            desc: val.name + ' Route'
+                                        },
+                                        native: {
+                                            routeid: val.routeid,
+                                            origin: val.origin,
+                                            originGeo: val.originGeo,
+                                            destination: val.destination,
+                                            destinationGeo: val.destinationGeo
+                                        }
+                                    };
+                                });
+                                adapter.log.debug('Filled device object: ' + JSON.stringify(device));
+                                cb();
+                            }
                         }
                     }
                 }
@@ -365,7 +461,7 @@ function secondsToTime(val) {
 
 function main() {
     adapter.setState('info.connection', false, true);
-    if (adapter.config.appID && adapter.config.appCode) {
+    if (adapter.config.apiKEY) {
         adapter.log.debug('Checking API Key..');
         checkApiKey();
         adapter.subscribeStates('*');
@@ -376,6 +472,9 @@ function main() {
                 checkDuration('all');
             }, adapter.config.pollingInterval * 60 * 1000);
         }
+    } else {
+        adapter.log.error('https://github.com/BuZZy1337/ioBroker.roadtraffic#getting-started');
+        adapter.log.error('You need to set the Api KEY in the instance settings!');
     }
     adapter.log.debug('Selected Alexa for Alarm: ' + adapter.config.alexa);
 }

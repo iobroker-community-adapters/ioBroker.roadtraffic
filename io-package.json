@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "roadtraffic",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "news": {
+            "0.1.1": {
+                "en": "Delete instance before update!!\nChanged HERE.com Api Authentication!\nALARMCLOCK NOT WORKING YET!!\nNew API Key needed (Readme)!!",
+                "de": "Instanz vor Update löschen!!\nHERE.com-API-Authentifizierung geändert!\nWECKER FUNKTIONIERT NOCH NICHT!!\nNeuer API-Schlüssel erforderlich (Readme)!!",
+                "ru": "Удалить экземпляр перед обновлением !!\nизменил аутентификацию Api HERE.com!\nТРЕВОГА НЕ РАБОТАЕТ !!\nТребуется новый ключ API (Readme) !!",
+                "pt": "Excluir instância antes da atualização !!\nAlterada a autenticação da API do HERE.com!\nO RELÓGIO DE ALARME NÃO FUNCIONA AINDA !!\nNova chave de API necessária (Leia-me) !!",
+                "nl": "Verwijder exemplaar vóór update !!\nVeranderd HERE.com Api-authenticatie!\nALARMCLOCK WERKT NOG NIET !!\nNieuwe API-sleutel nodig (Readme) !!",
+                "fr": "Supprimer l'instance avant la mise à jour !!\nModification de l'authentification Api HERE.com!\nALARMCLOCK NE FONCTIONNE PAS ENCORE !!\nNouvelle clé API requise (fichier Lisez-moi) !!",
+                "it": "Elimina l'istanza prima dell'aggiornamento !!\nAutenticazione Api HERE.com modificata!\nALARMCLOCK NON FUNZIONA ANCORA !!\nNuova chiave API necessaria (file Leggimi) !!",
+                "es": "Eliminar instancia antes de actualizar !!\n¡Cambió la autenticación de la API de HERE.com!\nALARMCLOCK NO FUNCIONA TODAVÍA !!\nNueva clave API necesaria (Léame) !!",
+                "pl": "Usuń instancję przed aktualizacją !!\nZmieniono uwierzytelnianie interfejsu HERE.com!\nALARMCLOCK NIE DZIAŁA JESZCZE !!\nPotrzebny nowy klucz API (plik Readme) !!",
+                "zh-cn": "在更新之前删除实例！！\n更改了HERE.com Api验证！\n警报尚未生效！！\n需要新的API密钥（自述文件）！"
+            },
             "0.1.0": {
                 "en": "Changed Adapter to use HERE.com instead of Google</br>READ THE NEW README BEFORE UPDATE!!",
                 "de": "Der Adapter wurde geändert, um HERE.com anstelle von Google zu verwenden. </br> LESEN SIE DIE NEUE README VOR DEM UPDATE !!",
@@ -92,18 +104,6 @@
     ],
     "instanceObjects": [
         {
-            "_id": "routes",
-            "type": "device",
-            "common": {
-                "name":  "Configured Routes",
-                "type":  "device",
-                "role":  "",
-                "read":  true,
-                "write": false,
-                "def":   ""
-            }
-        },
-        {
             "_id": "refresh",
             "type": "state",
             "common": {
@@ -128,7 +128,7 @@
             "type": "state",
             "common": {
                 "role": "indicator.connected",
-                "name": "If Google API Key is valid",
+                "name": "If HERE API Key is valid",
                 "type": "boolean",
                 "read": true,
                 "write": false,

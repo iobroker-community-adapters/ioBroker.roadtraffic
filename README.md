@@ -31,15 +31,15 @@ So lets go:
 
 ![Here4](img/Here4.png)
 
-5. At the next page you are already on your HERE.com Dashboard. Look for the REST & XYZ HUB API/CLI and click on "Generate App ID and App Code".
+5. At the next page you are already on your HERE.com Dashboard. Look for the REST Section and click on "Generate App".
 
 ![Here5](img/Here5.png)
 
-6. Open the Instancesettings of the roadtraffic Adapter in ioBroker and copy the App ID and the App Code into the fields.
-Click the Plus icon and create your first Route..
+6. Click on "Create API Key" - you will get an API Key .. Open the Instancesettings of the roadtraffic Adapter in ioBroker and paste the API Key into the config field.
 
 ![Here6](img/Here6.png)
 
+7. Click the Plus icon in the Instance-Settings and create your first Route..
 
 After you entered all informations to the config dialog click "Save & Close".
 The Adapter should now restart and you are ready to go!

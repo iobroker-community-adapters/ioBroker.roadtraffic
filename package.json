@@ -1,6 +1,6 @@
 {
   "name": "iobroker.roadtraffic",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Check traffic situation with HERE.com API",
   "author": {
     "name": "BuZZy1337",
@@ -19,7 +19,8 @@
     "traffic",
     "Maps",
     "Smart Home",
-    "home automation"
+    "home automation",
+    "alarmclock"
   ],
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "request": "^2.85.0",
+    "node-schedule": "^1.3.2",
     "@iobroker/adapter-core": "^1.0.3"
   },
   "devDependencies": {

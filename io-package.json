@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "roadtraffic",
-        "version": "0.1.1",
+        "version": "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": "Added Alarm-Clock. See Readme \"Alarm-Clock\" section for details",
+                "de": "Wecker hinzugefügt. Weitere Informationen finden Sie im Readme-Abschnitt \"Alarm-Clock\"",
+                "ru": "Добавлен будильник. Смотрите Readme \"Будильник\" раздел для деталей",
+                "pt": "Adicionado Despertador. Consulte a seção Leia-me \"Despertador\" para obter detalhes",
+                "nl": "Wekker toegevoegd. Zie het gedeelte Leesmij \"Wekker\" voor meer informatie",
+                "fr": "Réveil ajouté. Voir la section \"Réveil\" du fichier Lisez-moi pour plus de détails.",
+                "it": "Sveglia aggiunta. Vedere la sezione \"Sveglia\" del file Leggimi per i dettagli",
+                "es": "Reloj despertador agregado. Consulte la sección Léame \"Despertador\" para más detalles.",
+                "pl": "Dodano budzik. Szczegółowe informacje można znaleźć w sekcji „Budzik” w pliku Readme",
+                "zh-cn": "添加了闹钟。有关详细信息，请参见自述文件“闹钟”"
+            },
             "0.1.1": {
                 "en": "Delete instance before update!!\nChanged HERE.com Api Authentication!\nALARMCLOCK NOT WORKING YET!!\nNew API Key needed (Readme)!!",
                 "de": "Instanz vor Update löschen!!\nHERE.com-API-Authentifizierung geändert!\nWECKER FUNKTIONIERT NOCH NICHT!!\nNeuer API-Schlüssel erforderlich (Readme)!!",
@@ -89,7 +101,10 @@
         "type": "misc-data"
     },
     "native": {
-        "pollingInterval": 10
+        "pollingInterval": 5,
+        "speakString": "Guten Morgen %name. Bei aktueller Verkehrslage benötigst du %dur zur Arbeit.",
+        "alarmVolume": 50,
+        "stationId": "s18018"
     },
     "objects": [
         {

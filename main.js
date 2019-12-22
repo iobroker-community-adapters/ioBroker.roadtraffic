@@ -2,12 +2,11 @@
 /*jslint node: true */
 'use strict';
 
-
 const request = require('request');
-const path = require('path');
 const utils = require('@iobroker/adapter-core');
 const adapter = new utils.Adapter('roadtraffic');
 const objs = require('./lib/objs.js');
+const schedule = require('node-schedule');
 const FORBIDDEN_CHARS = /[\][*,;'"`<>\\?]/g;
 
 let pollingInterval;
@@ -20,10 +19,17 @@ let toDelete = [];              //-- [routeid,..] of routes that have to be dele
 let toUpdate = [];              //-- [routeid,..] of routes that have to be updated (filled by checkChannels();)
 let okayIds = [];               //-- [routeid,..] of routes that we dont have to take care about (filled by checkChannels();)
 let toCreate = [];              //-- [routeid,..] of routes that have to be created (filled by checkChannels();)
+let alarmObj = {};
 let device = {};
+let schedules = {};
+let triggerReset = schedule.scheduleJob('0 0 * * *', function () {
+    adapter.log.info('Resetting triggers for today..');
+    resetTrigger();
+});
 
 adapter.on('unload', function (callback) {
     try {
+        triggerReset.cancel();
         if (pollingInterval) clearInterval(pollingInterval);
         callback();
     } catch (e) {
@@ -40,17 +46,143 @@ adapter.on('objectChange', function (id, obj) {
 
 adapter.on('stateChange', function (id, state) {
     if (!state || state.ack) return;
+    adapter.log.debug('State changed: ' + id + ' ( ' + JSON.stringify(state) + ' )');
     var comp = id.split('.');
     if (comp[4] === 'refresh') {
         adapter.log.debug('Route Refresh triggered: ' + comp[2]);
         checkDuration(comp[2]);
-    }
-    else if (comp[2] === 'refresh') {
+    } else if (comp[4] === 'enabled') {
+        if (state.val) {
+            calcAlarm(true, comp[2], true);
+        } else {
+            if (schedules[comp[2]]) {
+                adapter.log.debug('Cancelled Schedule for ' + comp[2]);
+                schedules[comp[2]].cancel();
+                schedules[comp[2]] = false;
+            }
+        }
+    } else if (comp[4] === 'arrivaltime' || comp[4] === 'bathtime') {
+        calcAlarm(true, comp[2], true);
+    } else if (comp[2] === 'refresh') {
         adapter.log.debug('Route Refresh triggered (ALL)');
         checkDuration('all');
     }
+    adapter.setState(id, state.val, true);
 });
 
+let calcRunning = false;
+let calcRunName = '';
+
+function calcAlarm(get, name, gotEnabled) {
+    try {
+        if (calcRunning && name !== calcRunName && get) {
+            adapter.log.debug('calcAlarm already running.. Retry later..');
+            setTimeout(function () {
+                calcAlarm(get, name, gotEnabled);
+            }, 500);
+            return;
+        }
+        calcRunning = true;
+        calcRunName = name;
+        var now = new Date();
+        var dayOfWeek = now.getDay() === 0 ? 6 : now.getDay() - 1;
+        if (get) {
+            adapter.log.debug('Getting Alarmstates of ' + name + ' (' + objs.daysArray[dayOfWeek] + ')');
+            alarmObj[name] = {};
+            adapter.getState(name + '.' + objs.daysArray[dayOfWeek] + '.arrivaltime', function (err, state) {
+                alarmObj[name]['arrivaltime'] = state.val;
+                adapter.getState(name + '.' + objs.daysArray[dayOfWeek] + '.bathtime', function (err, state) {
+                    alarmObj[name]['bathtime'] = state.val;
+                    adapter.getState(name + '.' + objs.daysArray[dayOfWeek] + '.enabled', function (err, state) {
+                        alarmObj[name]['enabled'] = state.val;
+                        adapter.getState(name + '.route.durationTraffic', function (err, state) {
+                            alarmObj[name]['travelduration'] = state.val;
+                            calcAlarm(false, name, gotEnabled);
+                        });
+                    });
+                });
+            });
+            return;
+        } else {
+            adapter.log.debug('Checking if we have to trigger Alarm ' + name + '..');
+            if (!alarmObj[name]['enabled']) {
+                adapter.log.debug('Alarm for today is disabled..');
+                calcRunning = false;
+                return;
+            }
+            let arrivaltime = alarmObj[name]['arrivaltime'].split(':');
+            let travelduration = Math.floor(alarmObj[name]['travelduration'] / 60);
+            let bathtime = alarmObj[name]['bathtime'];
+            let minutesAfter0 = parseFloat(arrivaltime[0]) * 60 + parseFloat(arrivaltime[1]) - parseFloat(bathtime);
+            let trafficHours = Math.floor(travelduration / 60);
+            let trafficMinutes = travelduration % 60;
+            adapter.log.debug('Current travelduration on ' + name + ': ' + trafficHours + ':' + trafficMinutes);
+            let withTraffic = minutesAfter0 - travelduration;
+            let triggerHour = Math.floor(withTraffic / 60);
+            let triggerMinute = withTraffic % 60;
+            adapter.log.debug('Actual traffic on ' + name + ' requires to trigger at ' + triggerHour + ':' + triggerMinute);
+            adapter.getState(name + '.' + objs.daysArray[dayOfWeek] + '.triggered', function (err, state) {
+                if (state.val) {
+                    adapter.log.debug('Alarm already triggered for today..');
+                    return;
+                }
+                if ((now.getHours() > triggerHour) || (now.getHours() >= triggerHour && now.getMinutes() >= triggerMinute)) {
+                    if (gotEnabled) {
+                        adapter.setState(name + '.' + objs.daysArray[dayOfWeek] + '.triggered', true, true);
+                        adapter.log.warn('You enabled the Alarm ' + name + ' (' + objs.daysArray[dayOfWeek] + '). And your set arrivaltime + bathtime is already over the triggertime..');
+                        return;
+                    }
+                    adapter.log.debug('TRIGGERED ' + name + '!!!');
+                    triggerAlarm(name, dayOfWeek);
+                    if (schedules[name]) {
+                        schedules[name].cancel();
+                        schedules[name] = false;
+                    }
+                } else {
+                    let schedString = triggerMinute + ' ' + triggerHour + ' * * *';
+                    if (!schedules[name]) {
+                        adapter.log.debug('Schedule doesnt exist. Creating with ' + schedString);
+                        schedules[name] = schedule.scheduleJob(schedString, function () {
+                            adapter.log.debug('SCHEDULE FOR ' + name + ' REACHED!');
+                            triggerAlarm(name, dayOfWeek);
+                            schedules[name].cancel();
+                            schedules[name] = false;
+                        });
+                    } else {
+                        adapter.log.debug('Refreshing ' + name + ' schedule to ' + schedString);
+                        schedules[name].reschedule(schedString);
+                    }
+                }
+            });
+
+            calcRunning = false;
+        }
+    } catch (e) {
+        adapter.log.error('Error in calcAlarm(): ' + e);
+    }
+}
+
+function triggerAlarm(name, dayOfWeek) {
+    try {
+        adapter.setState(name + '.' + objs.daysArray[dayOfWeek] + '.triggered', true, true);
+        if (adapter.config.alarmSilent) {
+            return;
+        }
+        adapter.setForeignState(adapter.config.alexa + '.Player.volume', parseFloat(adapter.config.alarmVolume));
+        adapter.setForeignState(adapter.config.alexa + '.Player.TuneIn-Station', adapter.config.stationId);
+        if (adapter.config.speakString !== '') {
+            setTimeout(function () {
+                adapter.getState(name + '.route.durationTrafficText', function (err, state) {
+                    let string = adapter.config.speakString.replace('%dur', state.val).replace('%name', name);
+                    adapter.log.debug('Announcement String is: ' + string);
+                    adapter.setForeignState(adapter.config.alexa + '.Commands.speak', string);
+                });
+            }, 15000);
+        }
+    } catch (e) {
+        adapter.log.error('Error in triggerAlarm(): ' + e);
+    }
+}
 
 adapter.on('message', function (msg) {
     // if (msg.command === 'wizard' && !wizard) {
@@ -246,7 +378,7 @@ function checkChannels(arg) {
                             adapter.log.debug('Creating ' + device[val].common.name);
                             adapter.setObjectNotExists(device[val].common.name, device[val], function (err) {
                                 if (err) {
-                                    adapter.log.debug('Error in creating Device for Route: ' + err);
+                                    adapter.log.error('Error in creating Device for Route: ' + err);
                                 } else {
                                     adapter.log.debug('Success: Created Device ' + device[val].common.name);
                                     objs.channelsArray.forEach(function (value, i) {
@@ -319,12 +451,12 @@ function checkDuration(name) {
     } else {
         adapter.log.debug('Refreshing ' + name);
         adapter.getObject(name, function (err, obj) {
-            adapter.log.debug('Checking obj: ' + JSON.stringify(obj));
+            adapter.log.debug('Object ' + name + ': ' + JSON.stringify(obj));
             if (err) return;
             const origin = encodeURIComponent(obj.native.originGeo);
             const destination = encodeURIComponent(obj.native.destinationGeo)
             const link = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + adapter.config.apiKEY + '&waypoint0=' + origin + '&waypoint1=' + destination + '&jsonAttributes=41&mode=fastest;car;traffic:enabled;&language=de-de';
-            request(link, function (error, response, body) {
+            request({ url: link, timeout: 15000 }, function (error, response, body) {
                 if (!error) {
                     try {
                         if (response.statusCode === 200) {
@@ -340,6 +472,9 @@ function checkDuration(name) {
                                     adapter.setState(name + '.route.durationText', secondsToTime(info.response.route[0].summary.baseTime), true);
                                     adapter.setState(name + '.route.durationTraffic', info.response.route[0].summary.trafficTime, true);
                                     adapter.setState(name + '.route.durationTrafficText', secondsToTime(info.response.route[0].summary.trafficTime), true);
+                                    if (adapter.config.alarmEnabled) {
+                                        calcAlarm(true, name, false);
+                                    }
                                 } catch (e) {
                                     adapter.log.error('Error setting State: ' + e);
                                 }
@@ -359,9 +494,25 @@ function checkDuration(name) {
     }
 }
 
+function resetTrigger() {
+    try {
+        var now = new Date();
+        var dayOfWeek = now.getDay() === 0 ? 7 : now.getDay() - 1;
+        routes.forEach(function (val, i) {
+            adapter.setState(val.name + '.' + objs.daysArray[dayOfWeek] + '.triggered', false, true);
+            adapter.log.info('Trigger of ' + val.name + '.' + objs.daysArray[dayOfWeek] + ' has been reset to false.');
+            if (adapter.config.alarmEnabled) {
+                calcAlarm(true, val.name, false);
+            }
+        });
+    } catch (e) {
+        adapter.log.error('Error in resetTrigger(): ' + e);
+    }
+}
+
 function checkApiKey() {
     const link = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + adapter.config.apiKEY + '&waypoint0=geo!52.5170365,13.3888599&waypoint1=geo!52.5170365,13.3888599&mode=fastest;car;traffic:enabled;&language=de-de';
-    request(link, function (error, response, body) {
+    request({ url: link, timeout: 15000 }, function (error, response, body) {
         if (!error) {
             try {
                 var info = JSON.parse(body);
@@ -385,6 +536,10 @@ function checkApiKey() {
             }
         } else {
             adapter.log.error('Error in checkApiKey() request: ' + error);
+            adapter.log.error('Retry in 5 Minutes..');
+            setTimeout(function () {
+                checkApiKey();
+            }, 300000);
         }
     });
 }
@@ -402,7 +557,7 @@ function geoCode(num, cb) {
         }
         routePoint = routes[num][type];
         const link = 'https://geocoder.ls.hereapi.com/6.2/geocode.json?apikey=' + adapter.config.apiKEY + '&searchtext=' + encodeURIComponent(routePoint);
-        request(link, function (error, response, body) {
+        request({ url: link, timeout: 15000 }, function (error, response, body) {
             if (!error) {
                 try {
                     var info = JSON.parse(body);
@@ -456,7 +611,7 @@ function secondsToTime(val) {
     date.setSeconds(val);
     var hours = date.toISOString().substr(11, 2);
     var minutes = date.toISOString().substr(14, 2);
-    return (hours !== '00' ? hours + (parseFloat(hours) === 1 ? ' Stunde ' : ' Stunden ') + minutes + ' Minuten' : minutes + ' Minuten');
+    return (hours !== '00' ? parseFloat(hours) + (parseFloat(hours) === 1 ? ' Stunde ' : ' Stunden ') + parseFloat(minutes) + (parseFloat(minutes) === 1 ? ' Minute' : ' Minuten') : parseFloat(minutes) + (parseFloat(minutes) === 1 ? ' Minute' : ' Minuten'));
 }
 
 function main() {
@@ -466,7 +621,7 @@ function main() {
         checkApiKey();
         adapter.subscribeStates('*');
         if (!pollingInterval && adapter.config.pollingInterval) {
-            if (adapter.config.pollingInterval < 10) adapter.config.pollingInterval = 10;
+            if (adapter.config.pollingInterval < 5) adapter.config.pollingInterval = 5;
             pollingInterval = setInterval(() => {
                 adapter.log.debug('Polling interval reached..');
                 checkDuration('all');

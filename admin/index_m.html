@@ -111,6 +111,9 @@
             $('#alarmEnabled').change(function () {
                 toggleSettings();
             });
+            $('#alarmSilent').change(function () {
+                toggleSettings();
+            });
             getAlexas(settings);
             $("input[data-name='routeid']").prop("disabled", true);
             $("[data-name='routeid']").hide();
@@ -140,6 +143,11 @@
                 $('#alarmSettings').show();
             } else {
                 $('#alarmSettings').hide();
+            }
+            if ($('#alarmSilent').prop('checked')) {
+                $('#silent').hide();
+            } else {
+                $('#silent').show();
             }
         }
 
@@ -263,9 +271,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    <span class="translate">(DONT USE THIS FUNCTION YET!!!!) You can set the Alarm here. The Adapter
-                        will trigger the choosen Alarm when
-                        it is time to get up so you will not be late at work.</span>
+                    <span class="translate">You can enable the Alarmfunction here. The Adapter
+                        will trigger the Alarm if it is time to get up. (Configure the Alarm in the States of the
+                        Routes.)</span>
                 </div>
                 <div class="row">
                     <div class="col s12 m12 l12">
@@ -275,23 +283,32 @@
                 </div>
                 <div id="alarmSettings">
                     <div class="row">
-                        <div class="input-field col s12 m3 l3">
-                            <select class="value" id="workRoute"></select>
-                            <label class="translate" for="workRoute">Workroute</label>
-                        </div>
-                        <div class="input-field col s12 m3 l3">
-                            <select class="value" id="alexaDevice"></select>
-                            <label class="translate" for="alexaDevice">Alexa-Device</label>
+                        <div class="col s12 m12 l12">
+                            <input class="value" id="alarmSilent" type="checkbox" />
+                            <label for="alarmSilent" class="translate">Disable announcements (only set "triggered" State
+                                to true)</label>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col s12 m3 l3">
-                            <input class="value" id="stationId" />
-                            <label for="stationId" class="translate">Tune-In StationID</label>
+                    <div id="silent">
+                        <div class="row">
+                            <div class="input-field col s12 m3 l3">
+                                <select class="value" id="alexaDevice"></select>
+                                <label class="translate" for="alexaDevice">Alexa-Device</label>
+                            </div>
+                            <div class="col s12 m3 l3">
+                                <input class="value" id="stationId" />
+                                <label for="stationId" class="translate">Tune-In StationID</label>
+                            </div>
+                            <div class="col s12 m3 l3">
+                                <input class="value" id="alarmVolume" />
+                                <label for="alarmVolume" class="translate">Alarmvolume (0-100)</label>
+                            </div>
                         </div>
-                        <div class="col s12 m3 l3">
-                            <input class="value" id="alarmVolume" />
-                            <label for="alarmVolume" class="translate">Alarmvolume (0-100)</label>
+                        <div class="row">
+                            <div class="col s12 m9 l9">
+                                <input class="value" id="speakString" />
+                                <label for="speakString" class="translate">Speak string to be announced 15 Seconds after start playing Tune-In. (%dur = Travelduration, %name = Routename)</label>
+                            </div>
                         </div>
                     </div>
                 </div>

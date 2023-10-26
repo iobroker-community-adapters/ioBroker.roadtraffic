@@ -1,179 +1,192 @@
 {
-    "common": {
-        "name": "roadtraffic",
-        "version": "0.2.0",
-        "news": {
-            "0.2.0": {
-                "en": "Added Alarm-Clock. See Readme \"Alarm-Clock\" section for details",
-                "de": "Wecker hinzugefügt. Weitere Informationen finden Sie im Readme-Abschnitt \"Alarm-Clock\"",
-                "ru": "Добавлен будильник. Смотрите Readme \"Будильник\" раздел для деталей",
-                "pt": "Adicionado Despertador. Consulte a seção Leia-me \"Despertador\" para obter detalhes",
-                "nl": "Wekker toegevoegd. Zie het gedeelte Leesmij \"Wekker\" voor meer informatie",
-                "fr": "Réveil ajouté. Voir la section \"Réveil\" du fichier Lisez-moi pour plus de détails.",
-                "it": "Sveglia aggiunta. Vedere la sezione \"Sveglia\" del file Leggimi per i dettagli",
-                "es": "Reloj despertador agregado. Consulte la sección Léame \"Despertador\" para más detalles.",
-                "pl": "Dodano budzik. Szczegółowe informacje można znaleźć w sekcji „Budzik” w pliku Readme",
-                "zh-cn": "添加了闹钟。有关详细信息，请参见自述文件“闹钟”"
-            },
-            "0.1.1": {
-                "en": "Delete instance before update!!\nChanged HERE.com Api Authentication!\nALARMCLOCK NOT WORKING YET!!\nNew API Key needed (Readme)!!",
-                "de": "Instanz vor Update löschen!!\nHERE.com-API-Authentifizierung geändert!\nWECKER FUNKTIONIERT NOCH NICHT!!\nNeuer API-Schlüssel erforderlich (Readme)!!",
-                "ru": "Удалить экземпляр перед обновлением !!\nизменил аутентификацию Api HERE.com!\nТРЕВОГА НЕ РАБОТАЕТ !!\nТребуется новый ключ API (Readme) !!",
-                "pt": "Excluir instância antes da atualização !!\nAlterada a autenticação da API do HERE.com!\nO RELÓGIO DE ALARME NÃO FUNCIONA AINDA !!\nNova chave de API necessária (Leia-me) !!",
-                "nl": "Verwijder exemplaar vóór update !!\nVeranderd HERE.com Api-authenticatie!\nALARMCLOCK WERKT NOG NIET !!\nNieuwe API-sleutel nodig (Readme) !!",
-                "fr": "Supprimer l'instance avant la mise à jour !!\nModification de l'authentification Api HERE.com!\nALARMCLOCK NE FONCTIONNE PAS ENCORE !!\nNouvelle clé API requise (fichier Lisez-moi) !!",
-                "it": "Elimina l'istanza prima dell'aggiornamento !!\nAutenticazione Api HERE.com modificata!\nALARMCLOCK NON FUNZIONA ANCORA !!\nNuova chiave API necessaria (file Leggimi) !!",
-                "es": "Eliminar instancia antes de actualizar !!\n¡Cambió la autenticación de la API de HERE.com!\nALARMCLOCK NO FUNCIONA TODAVÍA !!\nNueva clave API necesaria (Léame) !!",
-                "pl": "Usuń instancję przed aktualizacją !!\nZmieniono uwierzytelnianie interfejsu HERE.com!\nALARMCLOCK NIE DZIAŁA JESZCZE !!\nPotrzebny nowy klucz API (plik Readme) !!",
-                "zh-cn": "在更新之前删除实例！！\n更改了HERE.com Api验证！\n警报尚未生效！！\n需要新的API密钥（自述文件）！"
-            },
-            "0.1.0": {
-                "en": "Changed Adapter to use HERE.com instead of Google\nREAD THE NEW README BEFORE UPDATE!!",
-                "de": "Der Adapter wurde geändert, um HERE.com anstelle von Google zu verwenden. \n LESEN SIE DIE NEUE README VOR DEM UPDATE !!",
-                "ru": "Изменен адаптер для использования HERE.com вместо Google \n ПРОЧИТАЙТЕ НОВОЕ README ПЕРЕД ОБНОВЛЕНИЕМ !!",
-                "pt": "Adaptador alterado para usar o HERE.com em vez do Google \n LEIA O NOVO LEIA-ME ANTES DE ATUALIZAR !!",
-                "nl": "Adapter gewijzigd om HERE.com te gebruiken in plaats van Google \n LEES HET NIEUWE LEESME VOOR UPDATE !!",
-                "fr": "Changement de l'adaptateur pour utiliser HERE.com au lieu de Google \n LISEZ LE NOUVEAU LISEZMOI AVANT LA MISE À JOUR !!",
-                "it": "Modificato l'adattatore per utilizzare HERE.com anziché Google \n LEGGI IL NUOVO README PRIMA DELL'AGGIORNAMENTO !!",
-                "es": "Adaptador modificado para usar HERE.com en lugar de Google \n ¡LEA EL NUEVO LÉAME ANTES DE ACTUALIZAR!",
-                "pl": "Zmieniono adapter, aby używał TUTAJ.com zamiast Google \n PRZECZYTAJ NOWY PLIK README !!",
-                "zh-cn": "已将适配器更改为使用HERE.com而不是Google \n 在更新前阅读新的自述文件！！"
-            },
-            "0.0.2": {
-                "en": "Release of the Adapter to the latest Repository",
-                "de": "Freigabe des Adapters für das neueste Repository",
-                "ru": "Выпуск Адаптера к последнему репозиторию",
-                "pt": "Liberação do Adaptador para o Repositório Mais Recente",
-                "nl": "Release van de adapter naar de nieuwste repository",
-                "fr": "Libération de l'adaptateur dans le dernier référentiel",
-                "it": "Rilascio dell'adattatore all'ultimo repository",
-                "es": "Lanzamiento del adaptador al último repositorio.",
-                "pl": "Wydanie adaptera do najnowszego repozytorium",
-                "zh-cn": "将适配器发布到最新的存储库"
-            },
-            "0.0.1": {
-                "en": "initial adapter",
-                "de": "Initiale Version",
-                "ru": "Первоначальный адаптер",
-                "pt": "Versão inicial",
-                "fr": "Version initiale",
-                "nl": "Eerste release"
-            }
-        },
-        "titleLang": {
-            "en": "RoadTraffic",
-            "de": "RoadTraffic",
-            "ru": "RoadТраффик",
-            "pt": "RoadTraffic",
-            "nl": "RoadTraffic",
-            "fr": "RoadTraffic",
-            "it": "RoadTraffic",
-            "es": "RoadTraffic",
-            "pl": "RoadTraff",
-            "uk": "Дорожня дорога",
-            "zh-cn": "道路交通工具"
-        },
-        "desc": {
-            "en": "Adapter to check actual traffic on the road and wake someone up in time to arrive at destination in time\n",
-            "de": "Adapter, um den tatsächlichen Verkehr auf der Straße zu überprüfen und um rechtzeitig geweckt zu werden, um pünktlich zum Ziel zu gelangen\n",
-            "ru": "Адаптер для проверки фактического трафика на дороге и просыпаться кто-то вовремя, чтобы прибыть в пункт назначения вовремя\n",
-            "pt": "Adaptador para verificar o tráfego real na estrada e acordar alguém no tempo para chegar ao destino no tempo\n",
-            "nl": "Adapter om het verkeer op de weg te controleren en iemand wakker te maken in de tijd om te arriveren in de tijd\n",
-            "fr": "Adaptateur pour vérifier le trafic réel sur la route et réveiller quelqu'un à temps pour arriver à destination à temps\n",
-            "it": "Adattatore per controllare il traffico effettivo sulla strada e svegliare qualcuno in tempo per arrivare a destinazione in tempo\n",
-            "es": "Adaptador para comprobar el tráfico real en la carretera y despertar a alguien a tiempo para llegar a destino en el tiempo\n",
-            "pl": "Adapter, aby sprawdzić rzeczywisty ruch na drodze i budzi kogoś w czasie, by przyjechać do miejsca\n",
-            "uk": "Перехідник для перевірки фактичного трафіку на дорозі і прокидати когось на час, щоб приїхати в пункт призначення\n",
-            "zh-cn": "检查公路的实际交通,并及时到达目的地的人\n"
-        },
-        "authors": [
-            "BuZZy1337 <buzzy1337@outlook.de>",
-            "iobroker-community-adapters <mcm57@gmx.at>"
-        ],
-        "keywords": [
-            "traffic",
-            "maps",
-            "route",
-            "trafficjam"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "roadtraffic.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.roadtraffic/master/admin/roadtraffic.png",
-        "readme": "https://github.com/iobroker-community-adapters/ioBroker.roadtraffic/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "misc-data",
-        "messagebox": true,
-        "subscribe": "messagebox",
-        "materialize": true,
-        "stopBeforeUpdate": true,
-        "compact": false,
-        "connectionType": "cloud",
-        "dataSource": "poll",
-        "dependencies": [
-          {
-            "js-controller": ">=4.0.24"
-          }
-        ],
-        "globalDependencies": [
-          {
-            "admin": ">=5.1.13"
-          }
-        ]    
+  "common": {
+    "name": "roadtraffic",
+    "version": "1.0.0-alpha.0",
+    "news": {
+      "1.0.0-alpha.0": {
+        "en": "This adapter has been moved into iobroker-community-organization.\nAdapter requires nodejs 18.x or newer now.\nDependencies have been updated.",
+        "de": "Dieser Adapter wurde in die iobroker-community-Organisation überführt.\nAdapter erfordert jetzt nodejs 18.x oder neuer.\nAbhängigkeiten wurden aktualisiert.",
+        "ru": "Этот адаптер был перемещен в iobroker-community-organization.\nАдаптер требует nodejs 18.x или новее теперь.\nОбновлены зависимости.",
+        "pt": "Este adaptador foi movido para iobroker-comunidade-organização.\nAdaptador requer nodejs 18.x ou mais recente agora.\nAs dependências foram atualizadas.",
+        "nl": "Deze adapter is verplaatst naar iobroker-community-organisatie.\nAdapter vereist nodejs 18.x of Newer nu.\nAfhankelijkheid is geüpdateerd.",
+        "fr": "Cet adaptateur a été déplacé dans l'iobroker-community-organization.\nAdaptateur nécessite nodejs 18.x ou plus récent maintenant.\nLes dépendances ont été mises à jour.",
+        "it": "Questo adattatore è stato spostato in iobroker-community-organizzazione.\nAdattatore richiede nodejs 18.x o più recente ora.\nLe dipendenze sono state aggiornate.",
+        "es": "Este adaptador se ha trasladado a la organización yobroker-community.\nAdaptador requiere nodejs 18.x o nuevo ahora.\nSe han actualizado las dependencias.",
+        "pl": "Ta adapter została przeniesiona do iobroker-community-organization.\nAdapter wymaga węzła 18.x lub nowszego.\nW zależności zostały zaktualizowane.",
+        "uk": "Цей адаптер був перенесений в iobroker-community-organization.\nАдаптер вимагає nodejs 18.x або новіший зараз.\nОновлено залежність.",
+        "zh-cn": "这种适应者已搬入零星-社区组织。.\n现在需要第18x或新人员。.\n情况已经更新。."
+      },
+      "0.2.0": {
+        "en": "Added Alarm-Clock. See Readme \"Alarm-Clock\" section for details",
+        "de": "Wecker hinzugefügt. Weitere Informationen finden Sie im Readme-Abschnitt \"Alarm-Clock\"",
+        "ru": "Добавлен будильник. Смотрите Readme \"Будильник\" раздел для деталей",
+        "pt": "Adicionado Despertador. Consulte a seção Leia-me \"Despertador\" para obter detalhes",
+        "nl": "Wekker toegevoegd. Zie het gedeelte Leesmij \"Wekker\" voor meer informatie",
+        "fr": "Réveil ajouté. Voir la section \"Réveil\" du fichier Lisez-moi pour plus de détails.",
+        "it": "Sveglia aggiunta. Vedere la sezione \"Sveglia\" del file Leggimi per i dettagli",
+        "es": "Reloj despertador agregado. Consulte la sección Léame \"Despertador\" para más detalles.",
+        "pl": "Dodano budzik. Szczegółowe informacje można znaleźć w sekcji „Budzik” w pliku Readme",
+        "zh-cn": "添加了闹钟。有关详细信息，请参见自述文件“闹钟”"
+      },
+      "0.1.1": {
+        "en": "Delete instance before update!!\nChanged HERE.com Api Authentication!\nALARMCLOCK NOT WORKING YET!!\nNew API Key needed (Readme)!!",
+        "de": "Instanz vor Update löschen!!\nHERE.com-API-Authentifizierung geändert!\nWECKER FUNKTIONIERT NOCH NICHT!!\nNeuer API-Schlüssel erforderlich (Readme)!!",
+        "ru": "Удалить экземпляр перед обновлением !!\nизменил аутентификацию Api HERE.com!\nТРЕВОГА НЕ РАБОТАЕТ !!\nТребуется новый ключ API (Readme) !!",
+        "pt": "Excluir instância antes da atualização !!\nAlterada a autenticação da API do HERE.com!\nO RELÓGIO DE ALARME NÃO FUNCIONA AINDA !!\nNova chave de API necessária (Leia-me) !!",
+        "nl": "Verwijder exemplaar vóór update !!\nVeranderd HERE.com Api-authenticatie!\nALARMCLOCK WERKT NOG NIET !!\nNieuwe API-sleutel nodig (Readme) !!",
+        "fr": "Supprimer l'instance avant la mise à jour !!\nModification de l'authentification Api HERE.com!\nALARMCLOCK NE FONCTIONNE PAS ENCORE !!\nNouvelle clé API requise (fichier Lisez-moi) !!",
+        "it": "Elimina l'istanza prima dell'aggiornamento !!\nAutenticazione Api HERE.com modificata!\nALARMCLOCK NON FUNZIONA ANCORA !!\nNuova chiave API necessaria (file Leggimi) !!",
+        "es": "Eliminar instancia antes de actualizar !!\n¡Cambió la autenticación de la API de HERE.com!\nALARMCLOCK NO FUNCIONA TODAVÍA !!\nNueva clave API necesaria (Léame) !!",
+        "pl": "Usuń instancję przed aktualizacją !!\nZmieniono uwierzytelnianie interfejsu HERE.com!\nALARMCLOCK NIE DZIAŁA JESZCZE !!\nPotrzebny nowy klucz API (plik Readme) !!",
+        "zh-cn": "在更新之前删除实例！！\n更改了HERE.com Api验证！\n警报尚未生效！！\n需要新的API密钥（自述文件）！"
+      },
+      "0.1.0": {
+        "en": "Changed Adapter to use HERE.com instead of Google\nREAD THE NEW README BEFORE UPDATE!!",
+        "de": "Der Adapter wurde geändert, um HERE.com anstelle von Google zu verwenden. \n LESEN SIE DIE NEUE README VOR DEM UPDATE !!",
+        "ru": "Изменен адаптер для использования HERE.com вместо Google \n ПРОЧИТАЙТЕ НОВОЕ README ПЕРЕД ОБНОВЛЕНИЕМ !!",
+        "pt": "Adaptador alterado para usar o HERE.com em vez do Google \n LEIA O NOVO LEIA-ME ANTES DE ATUALIZAR !!",
+        "nl": "Adapter gewijzigd om HERE.com te gebruiken in plaats van Google \n LEES HET NIEUWE LEESME VOOR UPDATE !!",
+        "fr": "Changement de l'adaptateur pour utiliser HERE.com au lieu de Google \n LISEZ LE NOUVEAU LISEZMOI AVANT LA MISE À JOUR !!",
+        "it": "Modificato l'adattatore per utilizzare HERE.com anziché Google \n LEGGI IL NUOVO README PRIMA DELL'AGGIORNAMENTO !!",
+        "es": "Adaptador modificado para usar HERE.com en lugar de Google \n ¡LEA EL NUEVO LÉAME ANTES DE ACTUALIZAR!",
+        "pl": "Zmieniono adapter, aby używał TUTAJ.com zamiast Google \n PRZECZYTAJ NOWY PLIK README !!",
+        "zh-cn": "已将适配器更改为使用HERE.com而不是Google \n 在更新前阅读新的自述文件！！"
+      },
+      "0.0.2": {
+        "en": "Release of the Adapter to the latest Repository",
+        "de": "Freigabe des Adapters für das neueste Repository",
+        "ru": "Выпуск Адаптера к последнему репозиторию",
+        "pt": "Liberação do Adaptador para o Repositório Mais Recente",
+        "nl": "Release van de adapter naar de nieuwste repository",
+        "fr": "Libération de l'adaptateur dans le dernier référentiel",
+        "it": "Rilascio dell'adattatore all'ultimo repository",
+        "es": "Lanzamiento del adaptador al último repositorio.",
+        "pl": "Wydanie adaptera do najnowszego repozytorium",
+        "zh-cn": "将适配器发布到最新的存储库"
+      },
+      "0.0.1": {
+        "en": "initial adapter",
+        "de": "Initiale Version",
+        "ru": "Первоначальный адаптер",
+        "pt": "Versão inicial",
+        "fr": "Version initiale",
+        "nl": "Eerste release"
+      }
     },
-    "native": {
-        "pollingInterval": 5,
-        "speakString": "Guten Morgen %name. Bei aktueller Verkehrslage benötigst du %dur zur Arbeit.",
-        "alarmVolume": 50,
-        "stationId": "s18018"
+    "titleLang": {
+      "en": "RoadTraffic",
+      "de": "RoadTraffic",
+      "ru": "RoadТраффик",
+      "pt": "RoadTraffic",
+      "nl": "RoadTraffic",
+      "fr": "RoadTraffic",
+      "it": "RoadTraffic",
+      "es": "RoadTraffic",
+      "pl": "RoadTraff",
+      "uk": "Дорожня дорога",
+      "zh-cn": "道路交通工具"
     },
-    "objects": [
-        {
-            "_id": "_design/roadtraffic",
-            "language": "javascript",
-            "views": {
-                "listRouteIDs": {
-                    "map": "function(doc) {\n  if (typeof doc.native !== 'undefined' && typeof doc.common !== 'undefined' && doc.native.routeid && doc.common.name) {\n   emit(doc._id, {[doc.native.routeid]:doc.common.name});\n  }\n}"
-                }
-            }
-        }
+    "desc": {
+      "en": "Adapter to check actual traffic on the road and wake someone up in time to arrive at destination in time\n",
+      "de": "Adapter, um den tatsächlichen Verkehr auf der Straße zu überprüfen und um rechtzeitig geweckt zu werden, um pünktlich zum Ziel zu gelangen\n",
+      "ru": "Адаптер для проверки фактического трафика на дороге и просыпаться кто-то вовремя, чтобы прибыть в пункт назначения вовремя\n",
+      "pt": "Adaptador para verificar o tráfego real na estrada e acordar alguém no tempo para chegar ao destino no tempo\n",
+      "nl": "Adapter om het verkeer op de weg te controleren en iemand wakker te maken in de tijd om te arriveren in de tijd\n",
+      "fr": "Adaptateur pour vérifier le trafic réel sur la route et réveiller quelqu'un à temps pour arriver à destination à temps\n",
+      "it": "Adattatore per controllare il traffico effettivo sulla strada e svegliare qualcuno in tempo per arrivare a destinazione in tempo\n",
+      "es": "Adaptador para comprobar el tráfico real en la carretera y despertar a alguien a tiempo para llegar a destino en el tiempo\n",
+      "pl": "Adapter, aby sprawdzić rzeczywisty ruch na drodze i budzi kogoś w czasie, by przyjechać do miejsca\n",
+      "uk": "Перехідник для перевірки фактичного трафіку на дорозі і прокидати когось на час, щоб приїхати в пункт призначення\n",
+      "zh-cn": "检查公路的实际交通,并及时到达目的地的人\n"
+    },
+    "authors": [
+      "BuZZy1337 <buzzy1337@outlook.de>",
+      "iobroker-community-adapters <mcm57@gmx.at>"
     ],
-    "instanceObjects": [
-        {
-            "_id": "refresh",
-            "type": "state",
-            "common": {
-                "name": "Refresh all routes now.",
-                "type": "boolean",
-                "role": "button",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "If HERE API Key is valid",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "keywords": [
+      "traffic",
+      "maps",
+      "route",
+      "trafficjam"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "roadtraffic.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.roadtraffic/master/admin/roadtraffic.png",
+    "readme": "https://github.com/iobroker-community-adapters/ioBroker.roadtraffic/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "misc-data",
+    "messagebox": true,
+    "subscribe": "messagebox",
+    "materialize": true,
+    "stopBeforeUpdate": true,
+    "compact": false,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "dependencies": [
+      {
+        "js-controller": ">=4.0.24"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=5.1.13"
+      }
     ]
+  },
+  "native": {
+    "pollingInterval": 5,
+    "speakString": "Guten Morgen %name. Bei aktueller Verkehrslage benötigst du %dur zur Arbeit.",
+    "alarmVolume": 50,
+    "stationId": "s18018"
+  },
+  "objects": [
+    {
+      "_id": "_design/roadtraffic",
+      "language": "javascript",
+      "views": {
+        "listRouteIDs": {
+          "map": "function(doc) {\n  if (typeof doc.native !== 'undefined' && typeof doc.common !== 'undefined' && doc.native.routeid && doc.common.name) {\n   emit(doc._id, {[doc.native.routeid]:doc.common.name});\n  }\n}"
+        }
+      }
+    }
+  ],
+  "instanceObjects": [
+    {
+      "_id": "refresh",
+      "type": "state",
+      "common": {
+        "name": "Refresh all routes now.",
+        "type": "boolean",
+        "role": "button",
+        "read": true,
+        "write": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "If HERE API Key is valid",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }

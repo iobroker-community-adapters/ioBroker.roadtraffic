@@ -1,6 +1,6 @@
 {
   "name": "iobroker.roadtraffic",
-  "version": "0.2.0",
+  "version": "1.0.0-alpha.0",
   "description": "Check traffic situation with HERE.com API",
   "author": {
     "name": "iobroker-community-adapters",
@@ -12,8 +12,8 @@
       "email": "buzzy1337@outlook.de"
     },
     {
-        "name": "iobroker-community-adapters",
-        "email": "mcm1957@gmx.de"
+      "name": "iobroker-community-adapters",
+      "email": "mcm1957@gmx.de"
     }
   ],
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.roadtraffic",

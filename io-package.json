@@ -60,45 +60,69 @@
                 "nl": "Eerste release"
             }
         },
-        "title": "RoadTraffic",
+        "titleLang": {
+            "en": "RoadTraffic",
+            "de": "RoadTraffic",
+            "ru": "RoadТраффик",
+            "pt": "RoadTraffic",
+            "nl": "RoadTraffic",
+            "fr": "RoadTraffic",
+            "it": "RoadTraffic",
+            "es": "RoadTraffic",
+            "pl": "RoadTraff",
+            "uk": "Дорожня дорога",
+            "zh-cn": "道路交通工具"
+        },
         "desc": {
-            "en": "Check actual traffic on the road and be awakened in time to arrive at your destination at the right time",
-            "de": "Überprüfen Sie den tatsächlichen Verkehr auf der Straße und werden Sie rechtzeitig geweckt, um zur richtigen Zeit am Ziel zu sein",
-            "ru": "Проверьте фактическое движение на дороге и будьте вовремя просыпаться, чтобы прибыть к месту назначения в нужное время",
-            "pt": "Verifique o tráfego real na estrada e seja despertado a tempo de chegar ao seu destino no momento certo",
-            "nl": "Controleer het actuele verkeer op de weg en word op tijd gewekt om op het juiste moment op uw bestemming aan te komen",
-            "fr": "Vérifiez le trafic réel sur la route et soyez réveillé à temps pour arriver à destination au bon moment",
-            "it": "Controlla il traffico effettivo sulla strada e sii svegliato in tempo per arrivare a destinazione al momento giusto",
-            "es": "Verifique el tráfico real en la carretera y despiértese a tiempo para llegar a su destino en el momento adecuado",
-            "pl": "Sprawdź rzeczywisty ruch na drodze i obudzić się na czas, aby dotrzeć do miejsca docelowego we właściwym czasie",
-            "zh-cn": "检查道路上的实际交通情况，并及时唤醒，以便在合适的时间到达目的地"
+            "en": "Adapter to check actual traffic on the road and wake someone up in time to arrive at destination in time\n",
+            "de": "Adapter, um den tatsächlichen Verkehr auf der Straße zu überprüfen und um rechtzeitig geweckt zu werden, um pünktlich zum Ziel zu gelangen\n",
+            "ru": "Адаптер для проверки фактического трафика на дороге и просыпаться кто-то вовремя, чтобы прибыть в пункт назначения вовремя\n",
+            "pt": "Adaptador para verificar o tráfego real na estrada e acordar alguém no tempo para chegar ao destino no tempo\n",
+            "nl": "Adapter om het verkeer op de weg te controleren en iemand wakker te maken in de tijd om te arriveren in de tijd\n",
+            "fr": "Adaptateur pour vérifier le trafic réel sur la route et réveiller quelqu'un à temps pour arriver à destination à temps\n",
+            "it": "Adattatore per controllare il traffico effettivo sulla strada e svegliare qualcuno in tempo per arrivare a destinazione in tempo\n",
+            "es": "Adaptador para comprobar el tráfico real en la carretera y despertar a alguien a tiempo para llegar a destino en el tiempo\n",
+            "pl": "Adapter, aby sprawdzić rzeczywisty ruch na drodze i budzi kogoś w czasie, by przyjechać do miejsca\n",
+            "uk": "Перехідник для перевірки фактичного трафіку на дорозі і прокидати когось на час, щоб приїхати в пункт призначення\n",
+            "zh-cn": "检查公路的实际交通,并及时到达目的地的人\n"
         },
         "authors": [
-            "BuZZy1337 <buzzy1337@outlook.de>"
+            "BuZZy1337 <buzzy1337@outlook.de>",
+            "iobroker-community-adapters <mcm57@gmx.at>"
         ],
-        "platform": "Javascript/Node.js",
-        "license": "MIT",
-        "mode": "daemon",
-        "icon": "roadtraffic.png",
-        "messagebox": true,
-        "subscribe": "messagebox",
-        "materialize": true,
-        "enabled": true,
-        "stopBeforeUpdate": true,
-        "extIcon": "https://raw.githubusercontent.com/BuZZy1337/ioBroker.roadtraffic/master/admin/roadtraffic.png",
         "keywords": [
             "traffic",
             "maps",
             "route",
-            "verkehr",
-            "wecker",
-            "stau",
-            "google",
-            "arbeit"
+            "trafficjam"
         ],
-        "readme": "https://github.com/BuZZy1337/ioBroker.roadtraffic/blob/master/README.md",
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "roadtraffic.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.roadtraffic/master/admin/roadtraffic.png",
+        "readme": "https://github.com/iobroker-community-adapters/ioBroker.roadtraffic/blob/master/README.md",
         "loglevel": "info",
-        "type": "misc-data"
+        "mode": "daemon",
+        "type": "misc-data",
+        "messagebox": true,
+        "subscribe": "messagebox",
+        "materialize": true,
+        "stopBeforeUpdate": true,
+        "compact": false,
+        "connectionType": "cloud",
+        "dataSource": "poll",
+        "dependencies": [
+          {
+            "js-controller": ">=4.0.24"
+          }
+        ],
+        "globalDependencies": [
+          {
+            "admin": ">=5.1.13"
+          }
+        ]    
     },
     "native": {
         "pollingInterval": 5,

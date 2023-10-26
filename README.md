@@ -1,7 +1,7 @@
 ![Logo](admin/roadtraffic.png)
 # ioBroker.roadtraffic
 
-![GitHub license](https://img.shields.io/github/license/iobroker-community-adapters/ioBroker.roadtraffic)](https://github.com/iobroker-community-adapters/ioBroker.roadtraffic/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/iobroker-community-adapters/ioBroker.roadtraffic)](https://github.com/iobroker-community-adapters/ioBroker.roadtraffic/blob/master/LICENSE)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.roadtraffic.svg)](https://www.npmjs.com/package/iobroker.roadtraffic)
 ![GitHub repo size](https://img.shields.io/github/repo-size/iobroker-community-adapters/ioBroker.roadtraffic)
 [![Translation status](https://weblate.iobroker.net/widgets/adapters/-/roadtraffic/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)</br>

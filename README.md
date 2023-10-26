@@ -112,6 +112,7 @@ In each Channel you have following states:
 ## License
 The MIT License (MIT)
 
+Copyright (c) 2023 iobroker-community-adapters <mcm57@gmx.at>
 Copyright (c) 2019 BuZZy1337 <buzzy1337@outlook.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

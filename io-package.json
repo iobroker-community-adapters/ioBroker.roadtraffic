@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "roadtraffic",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "news": {
+      "1.0.1": {
+        "en": "Issues reported by ioBroker adapter checker and lint have been fixed.",
+        "de": "Die von ioBroker Adapter Checker und Lint gemeldeten Probleme wurden behoben.",
+        "ru": "Проблемы, сообщаемые ioBroker адаптером checker и lint, были зафиксированы.",
+        "pt": "Questões relatadas pelo verificador do adaptador ioBroker e lint foram corrigidas.",
+        "nl": "Issues gemeld door ioBroker adapter en lint zijn gerepareerd.",
+        "fr": "Les problèmes signalés par ioBroker adaptateur checker et lint ont été corrigés.",
+        "it": "I problemi segnalati dall'adattatore ioBroker checker e lint sono stati fissati.",
+        "es": "Se han solucionado los problemas reportados por el adaptador de ioBroker y el forro.",
+        "pl": "Okładki doniesione przez adaptatora ioBrokera zostały ustalone.",
+        "uk": "Виправлено випуски, які повідомляються іоБрокером адаптером, і зафіксовано.",
+        "zh-cn": "奥布罗克变器和润滑剂所报告的问题已经确定。."
+      },
       "1.0.0": {
         "en": "This adapter has been moved into iobroker-community-organization.\nAdapter requires nodejs 18.x or newer now.\nDependencies have been updated.",
         "de": "Dieser Adapter wurde in die iobroker-community-Organisation überführt.\nAdapter erfordert jetzt nodejs 18.x oder neuer.\nAbhängigkeiten wurden aktualisiert.",

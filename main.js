@@ -38,10 +38,10 @@ adapter.on('unload', function (callback) {
 });
 
 
-adapter.on('objectChange', function (id, obj) {
-    // Warning, obj can be null if it was deleted
-    // adapter.log.debug('objectChange ' + id + ' ' + JSON.stringify(obj));
-});
+//adapter.on('objectChange', function (id, obj) {
+//    // Warning, obj can be null if it was deleted
+//    // adapter.log.debug('objectChange ' + id + ' ' + JSON.stringify(obj));
+//});
 
 
 adapter.on('stateChange', function (id, state) {
@@ -184,12 +184,12 @@ function triggerAlarm(name, dayOfWeek) {
     }
 }
 
-adapter.on('message', function (msg) {
-    // if (msg.command === 'wizard' && !wizard) {
-    //     startWizard(msg);
-    //     wizard = true;
-    // }
-});
+//adapter.on('message', function (msg) {
+//    // if (msg.command === 'wizard' && !wizard) {
+//    //     startWizard(msg);
+//    //     wizard = true;
+//    // }
+//});
 
 
 
@@ -230,7 +230,7 @@ function getChannels() {  // Fill arrays and objects for comparing configured vs
                     if (Array.isArray(doc.rows) && doc.rows.length > 0) {
                         adapter.log.debug('ObjectView got: ' + JSON.stringify(doc));
                         // Filling array and obj with existing routes
-                        doc.rows.forEach(function (val, i) {
+                        doc.rows.forEach(function (val, _i) {
                             adapter.log.debug('Pushed ' + JSON.stringify(val.value) + ' to currentIdsArray!');
                             currentIdsArray.push(val.value);
                         });
@@ -239,7 +239,7 @@ function getChannels() {  // Fill arrays and objects for comparing configured vs
                         currentIdsArray = Object.keys(currentIdsObject);
                         adapter.log.debug('currentIdsArray now: ' + JSON.stringify(currentIdsArray));
                         // Continue with generating the same stuff for configured routes
-                        routes.forEach(function (val, i) {
+                        routes.forEach(function (val, _i) {
                             configuredIdsObject[val.routeid] = val.name;
                         });
                         adapter.log.debug('configuredIdsObject now: ' + JSON.stringify(configuredIdsObject));
@@ -249,7 +249,7 @@ function getChannels() {  // Fill arrays and objects for comparing configured vs
                         checkChannels(1);
                     } else {
                         adapter.log.debug('getChannels() got nothing..');
-                        routes.forEach(function (val, i) {
+                        routes.forEach(function (val, _i) {
                             configuredIdsObject[val.routeid] = val.name;
                         });
                         adapter.log.debug('configuredIdsObject now: ' + JSON.stringify(configuredIdsObject));
@@ -336,9 +336,9 @@ function checkChannels(arg) {
                 break;
             case 2:
                 adapter.log.debug('checkChannels(2) called.. Starting to delete devices..');
-                toDelete.forEach(function (val, i) {
+                toDelete.forEach(function (val, _i) {
                     adapter.log.debug('Trying to delete ' + currentIdsObject[val]);
-                    adapter.deleteDevice(currentIdsObject[val], function (err) {
+                    adapter.deleteDevice(currentIdsObject[val], function (_err) {
                         delCount++;
                         adapter.log.debug('Deleted ' + currentIdsObject[val] + ' ...');
                         if (delCount === toDelete.length) {
@@ -354,7 +354,7 @@ function checkChannels(arg) {
                 break;
             case 3:
                 adapter.log.debug('checkChannels(3) called.. Starting to update devices..');
-                toUpdate.forEach(function (val, i) {
+                toUpdate.forEach(function (val, _i) {
                     updateCount++;
                     adapter.extendObject(currentIdsObject[val], device[val], function (err) {
                         if (err) {
@@ -373,7 +373,7 @@ function checkChannels(arg) {
                     const channelstoCreate = (toCreate.length * objs.channelsArray.length);
                     const statestoCreate = (toCreate.length * objs.statesArray.length) + (toCreate.length * objs.alarmArray.length * objs.daysArray.length);
                     adapter.log.debug('checkChannels(4) called.. Starting to create devices..');
-                    toCreate.forEach(function (val, i) {
+                    toCreate.forEach(function (val, _i) {
                         try {
                             adapter.log.debug('Creating ' + device[val].common.name);
                             adapter.setObjectNotExists(device[val].common.name, device[val], function (err) {
@@ -381,13 +381,13 @@ function checkChannels(arg) {
                                     adapter.log.error('Error in creating Device for Route: ' + err);
                                 } else {
                                     adapter.log.debug('Success: Created Device ' + device[val].common.name);
-                                    objs.channelsArray.forEach(function (value, i) {
+                                    objs.channelsArray.forEach(function (value, _i) {
                                         adapter.setObjectNotExists(device[val].common.name + '.' + value, objs.channels[value], function (err) {
                                             if (!err) {
                                                 adapter.log.debug('Created channel ' + device[val].common.name + '.' + value);
                                                 createdChannelCount++;
                                                 if (value === 'route') {
-                                                    objs.statesArray.forEach(function (value, i) {
+                                                    objs.statesArray.forEach(function (value, _i) {
                                                         adapter.setObjectNotExists(device[val].common.name + '.route.' + value, objs.states[value], function (err) {
                                                             if (err) {
                                                                 adapter.log.error(err);
@@ -402,7 +402,7 @@ function checkChannels(arg) {
                                                         });
                                                     });
                                                 } else if (objs.daysArray.indexOf(value) !== -1) {
-                                                    objs.alarmArray.forEach(function (val2, i) {
+                                                    objs.alarmArray.forEach(function (val2, _i) {
                                                         adapter.setObjectNotExists(device[val].common.name + '.' + value + '.' + val2, objs.alarm[val2], function (err) {
                                                             if (err) {
                                                                 adapter.log.error(err);
@@ -444,7 +444,7 @@ function checkDuration(name) {
     }
     if (name === 'all') {
         adapter.log.debug('Refreshing all routes.. (' + JSON.stringify(configuredIdsArray) + ')');
-        configuredIdsArray.forEach(function (val, i) {
+        configuredIdsArray.forEach(function (val, _i) {
             adapter.log.debug('Calling refresh of ' + configuredIdsObject[val]);
             checkDuration(configuredIdsObject[val]);
         });
@@ -498,7 +498,7 @@ function resetTrigger() {
     try {
         const now = new Date();
         const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay() - 1;
-        routes.forEach(function (val, i) {
+        routes.forEach(function (val, _i) {
             adapter.setState(val.name + '.' + objs.daysArray[dayOfWeek] + '.triggered', false, true);
             adapter.log.info('Trigger of ' + val.name + '.' + objs.daysArray[dayOfWeek] + ' has been reset to false.');
             if (adapter.config.alarmEnabled) {
@@ -573,7 +573,7 @@ function geoCode(num, cb) {
                         } else {
                             adapter.log.debug('Geocoded ' + run + ' waypoints.. That was the last one..');
                             if (Array.isArray(routes) && routes.length > 0) {
-                                routes.forEach(function (val, i) {
+                                routes.forEach(function (val, _i) {
                                     toCreate.push(val.routeid);
                                     device[val.routeid] = {
                                         type: 'device',

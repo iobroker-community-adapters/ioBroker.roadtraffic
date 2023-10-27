@@ -514,7 +514,7 @@ function resetTrigger() {
 
 function checkApiKey() {
     const link = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + adapter.config.apiKEY + '&waypoint0=geo!52.5170365,13.3888599&waypoint1=geo!52.5170365,13.3888599&mode=fastest;car;traffic:enabled;&language=de-de';
-    adapter.log.debug('HERE REQ:' + 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + '*****' + '&waypoint0=geo!52.5170365,13.3888599&waypoint1=geo!52.5170365,13.3888599&mode=fastest;car;traffic:enabled;&language=de-de';
+    adapter.log.debug('HERE REQ:' + 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + '*****' + '&waypoint0=geo!52.5170365,13.3888599&waypoint1=geo!52.5170365,13.3888599&mode=fastest;car;traffic:enabled;&language=de-de');
     request({ url: link, timeout: 15000 }, function (error, response, body) {
         if (!error) {
             try {

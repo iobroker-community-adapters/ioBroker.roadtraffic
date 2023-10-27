@@ -463,8 +463,8 @@ function checkDuration(name) {
                         adapter.log.debug('HERE RESP:'+body);
                         if (response.statusCode === 200) {
                             const info = JSON.parse(body);
-                            if (info.status !== 'OK' && info.error_message) {
-                                adapter.log.error('Error from HERE: ' + info.error_message);
+                            if (info.status !== 'OK' && info.error_description) {
+                                adapter.log.error('Error from HERE: ' + info.status + ' / ' + info.error + ' : ' + info.error_description);
                             } else {
                                 adapter.log.debug('HERE response: ' + JSON.stringify(info));
                                 try {
@@ -521,7 +521,8 @@ function checkApiKey() {
                 adapter.log.debug('HERE RESP:' + body);
                 const info = JSON.parse(body);
                 if (response.statusCode !== 200) {
-                    adapter.log.error('Error from HERE: ' + info.type + ' ' + info.subtype);
+                    adapter.log.error('Error from HERE: ' + info.status + ' / ' + info.error + ' : ' + info.error_description);
+                    //adapter.log.error('Error from HERE: ' + info.type + ' ' + info.subtype);
                     if (info.details) adapter.log.error('Additional Error: ' + info.details);
                     adapter.setState('info.connection', false, true);
                 } else {

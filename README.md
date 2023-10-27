@@ -88,6 +88,9 @@ In each Channel you have following states:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (mcm1957) Error logging has been corrected.
+
 ### 1.0.1 (2023-10-26)
 * (mcm1957) Issues reported by ioBroker adapter checker and lint have been fixed.
 

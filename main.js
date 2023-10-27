@@ -456,11 +456,11 @@ function checkDuration(name) {
             const origin = encodeURIComponent(obj.native.originGeo);
             const destination = encodeURIComponent(obj.native.destinationGeo);
             const link = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + adapter.config.apiKEY + '&waypoint0=' + origin + '&waypoint1=' + destination + '&jsonAttributes=41&mode=fastest;car;traffic:enabled;&language=de-de';
-            adapter.log.silly('HERE REQ:'+link);
+            adapter.log.debug('HERE REQ:'+link);
             request({ url: link, timeout: 15000 }, function (error, response, body) {
                 if (!error) {
                     try {
-                        adapter.log.silly('HERE RESP:'+body);
+                        adapter.log.debug('HERE RESP:'+body);
                         if (response.statusCode === 200) {
                             const info = JSON.parse(body);
                             if (info.status !== 'OK' && info.error_message) {
@@ -514,11 +514,11 @@ function resetTrigger() {
 
 function checkApiKey() {
     const link = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + adapter.config.apiKEY + '&waypoint0=geo!52.5170365,13.3888599&waypoint1=geo!52.5170365,13.3888599&mode=fastest;car;traffic:enabled;&language=de-de';
-    adapter.log.silly('HERE REQ:' + link);
+    adapter.log.debug('HERE REQ:' + link);
     request({ url: link, timeout: 15000 }, function (error, response, body) {
         if (!error) {
             try {
-                adapter.log.silly('HERE RESP:' + body);
+                adapter.log.debug('HERE RESP:' + body);
                 const info = JSON.parse(body);
                 if (response.statusCode !== 200) {
                     adapter.log.error('Error from HERE: ' + info.type + ' ' + info.subtype);

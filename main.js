@@ -521,7 +521,7 @@ function checkApiKey() {
                 adapter.log.debug('HERE RESP:' + body);
                 const info = JSON.parse(body);
                 if (response.statusCode !== 200) {
-                    adapter.log.error('Error from HERE: ' + info.status + ' / ' + info.error + ' : ' + info.error_description);
+                    adapter.log.error('Error from HERE: ' + info.statusCode + ' / ' + info.error + ' : ' + info.error_description);
                     //adapter.log.error('Error from HERE: ' + info.type + ' ' + info.subtype);
                     if (info.details) adapter.log.error('Additional Error: ' + info.details);
                     adapter.setState('info.connection', false, true);

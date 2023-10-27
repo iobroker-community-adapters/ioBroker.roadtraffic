@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "roadtraffic",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "news": {
+      "1.0.2": {
+        "en": "Error logging has been corrected.",
+        "de": "Die Fehlerprotokollierung wurde korrigiert.",
+        "ru": "Исправлена ошибка входа.",
+        "pt": "O registo de erros foi corrigido.",
+        "nl": "Error Logging is gecorrigeerd.",
+        "fr": "L'enregistrement d'erreur a été corrigé.",
+        "it": "La registrazione degli errori è stata corretta.",
+        "es": "Se ha corregido el registro de errores.",
+        "pl": "Error loglog został poprawiony.",
+        "uk": "Виправлено помилку.",
+        "zh-cn": "伐木已被纠正。."
+      },
       "1.0.1": {
         "en": "Issues reported by ioBroker adapter checker and lint have been fixed.",
         "de": "Die von ioBroker Adapter Checker und Lint gemeldeten Probleme wurden behoben.",
@@ -76,14 +89,6 @@
         "es": "Lanzamiento del adaptador al último repositorio.",
         "pl": "Wydanie adaptera do najnowszego repozytorium",
         "zh-cn": "将适配器发布到最新的存储库"
-      },
-      "0.0.1": {
-        "en": "initial adapter",
-        "de": "Initiale Version",
-        "ru": "Первоначальный адаптер",
-        "pt": "Versão inicial",
-        "fr": "Version initiale",
-        "nl": "Eerste release"
       }
     },
     "titleLang": {

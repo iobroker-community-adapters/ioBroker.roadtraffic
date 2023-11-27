@@ -88,7 +88,7 @@ In each Channel you have following states:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.1.0-alpha.0 (2023-11-27)
 * (icastillo15) add support for HERE v8 api
 * (mcm1957) Dependencies have been updated.
 
@@ -118,7 +118,6 @@ In each Channel you have following states:
 
 ### 0.0.1
 * (BuZZy1337) initial release
-
 
 ## Credits
 Code adaptions to use HERE v8 pi have been provided by @icastillo15 <starwarsmalu@gmail.com>.

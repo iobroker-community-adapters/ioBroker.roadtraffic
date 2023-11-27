@@ -1,6 +1,6 @@
 {
   "name": "iobroker.roadtraffic",
-  "version": "1.0.2",
+  "version": "1.1.0-alpha.0",
   "description": "Check traffic situation with HERE.com API",
   "author": {
     "name": "iobroker-community-adapters",

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "roadtraffic",
-    "version": "1.0.2",
+    "version": "1.1.0-alpha.0",
     "news": {
+      "1.1.0-alpha.0": {
+        "en": "add support for HERE v8 api\nDependencies have been updated.",
+        "de": "Unterstützung für HERE v8 api wurde hinzugefügt\nAbhängigkeiten wurden aktualisiert.",
+        "ru": "добавить поддержку HERE v8 api\nОбновлены зависимости.",
+        "pt": "adicionar suporte para HERE v8 api\nAs dependências foram atualizadas.",
+        "nl": "steun hier v8 api\nAfhankelijkheid is geüpdateerd.",
+        "fr": "ajouter du support pour HERE v8 api\nLes dépendances ont été mises à jour.",
+        "it": "aggiungere supporto per HERE v8 api\nLe dipendenze sono state aggiornate.",
+        "es": "añadir soporte para AQUÍ v8 api\nSe han actualizado las dependencias.",
+        "pl": "dodaje wsparcie dla HERE v8 api\nW zależności zostały zaktualizowane.",
+        "uk": "підтримка HERE v8 api\nОновлено залежність.",
+        "zh-cn": "增加对HERE v8 api的支助\n情况已经更新。."
+      },
       "1.0.2": {
         "en": "Error logging has been corrected.",
         "de": "Die Fehlerprotokollierung wurde korrigiert.",
@@ -77,18 +90,6 @@
         "es": "Adaptador modificado para usar HERE.com en lugar de Google \n ¡LEA EL NUEVO LÉAME ANTES DE ACTUALIZAR!",
         "pl": "Zmieniono adapter, aby używał TUTAJ.com zamiast Google \n PRZECZYTAJ NOWY PLIK README !!",
         "zh-cn": "已将适配器更改为使用HERE.com而不是Google \n 在更新前阅读新的自述文件！！"
-      },
-      "0.0.2": {
-        "en": "Release of the Adapter to the latest Repository",
-        "de": "Freigabe des Adapters für das neueste Repository",
-        "ru": "Выпуск Адаптера к последнему репозиторию",
-        "pt": "Liberação do Adaptador para o Repositório Mais Recente",
-        "nl": "Release van de adapter naar de nieuwste repository",
-        "fr": "Libération de l'adaptateur dans le dernier référentiel",
-        "it": "Rilascio dell'adattatore all'ultimo repository",
-        "es": "Lanzamiento del adaptador al último repositorio.",
-        "pl": "Wydanie adaptera do najnowszego repozytorium",
-        "zh-cn": "将适配器发布到最新的存储库"
       }
     },
     "titleLang": {

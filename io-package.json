@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "roadtraffic",
-    "version": "1.1.0-alpha.0",
+    "version": "1.1.0",
     "news": {
+      "1.1.0": {
+        "en": "Support for HERE v8 api protocol has been added.\nDependencies have been updated.",
+        "de": "Die Unterstützung für HERE v8 api Protokoll wurde hinzugefügt.\nAbhängigkeiten wurden aktualisiert.",
+        "ru": "Добавлена поддержка протокола HERE v8 api.\nОбновлены зависимости.",
+        "pt": "Suporte para HERE v8 api protocoll foi adicionado.\nAs dependências foram atualizadas.",
+        "nl": "Steun voor hier v8 api protocoll is toegevoegd.\nAfhankelijkheid is geüpdateerd.",
+        "fr": "Le support pour le protocole ICI v8 api a été ajouté.\nLes dépendances ont été mises à jour.",
+        "it": "È stato aggiunto il supporto per il protocollo HERE v8 api.\nLe dipendenze sono state aggiornate.",
+        "es": "Se ha añadido soporte para AQUÍ v8 api protocoll.\nSe han actualizado las dependencias.",
+        "pl": "Dodano obsługę protokołu HERE v8 api.\nW zależności zostały zaktualizowane.",
+        "uk": "Додано підтримку протоколу HERE v8.\nОновлено залежність.",
+        "zh-cn": "增加了对HERE v8 api议定书的支持。.\n情况已经更新。."
+      },
       "1.1.0-alpha.0": {
         "en": "add support for HERE v8 api\nDependencies have been updated.",
         "de": "Unterstützung für HERE v8 api wurde hinzugefügt\nAbhängigkeiten wurden aktualisiert.",
@@ -78,18 +91,6 @@
         "es": "Eliminar instancia antes de actualizar !!\n¡Cambió la autenticación de la API de HERE.com!\nALARMCLOCK NO FUNCIONA TODAVÍA !!\nNueva clave API necesaria (Léame) !!",
         "pl": "Usuń instancję przed aktualizacją !!\nZmieniono uwierzytelnianie interfejsu HERE.com!\nALARMCLOCK NIE DZIAŁA JESZCZE !!\nPotrzebny nowy klucz API (plik Readme) !!",
         "zh-cn": "在更新之前删除实例！！\n更改了HERE.com Api验证！\n警报尚未生效！！\n需要新的API密钥（自述文件）！"
-      },
-      "0.1.0": {
-        "en": "Changed Adapter to use HERE.com instead of Google\nREAD THE NEW README BEFORE UPDATE!!",
-        "de": "Der Adapter wurde geändert, um HERE.com anstelle von Google zu verwenden. \n LESEN SIE DIE NEUE README VOR DEM UPDATE !!",
-        "ru": "Изменен адаптер для использования HERE.com вместо Google \n ПРОЧИТАЙТЕ НОВОЕ README ПЕРЕД ОБНОВЛЕНИЕМ !!",
-        "pt": "Adaptador alterado para usar o HERE.com em vez do Google \n LEIA O NOVO LEIA-ME ANTES DE ATUALIZAR !!",
-        "nl": "Adapter gewijzigd om HERE.com te gebruiken in plaats van Google \n LEES HET NIEUWE LEESME VOOR UPDATE !!",
-        "fr": "Changement de l'adaptateur pour utiliser HERE.com au lieu de Google \n LISEZ LE NOUVEAU LISEZMOI AVANT LA MISE À JOUR !!",
-        "it": "Modificato l'adattatore per utilizzare HERE.com anziché Google \n LEGGI IL NUOVO README PRIMA DELL'AGGIORNAMENTO !!",
-        "es": "Adaptador modificado para usar HERE.com en lugar de Google \n ¡LEA EL NUEVO LÉAME ANTES DE ACTUALIZAR!",
-        "pl": "Zmieniono adapter, aby używał TUTAJ.com zamiast Google \n PRZECZYTAJ NOWY PLIK README !!",
-        "zh-cn": "已将适配器更改为使用HERE.com而不是Google \n 在更新前阅读新的自述文件！！"
       }
     },
     "titleLang": {

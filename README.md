@@ -88,7 +88,7 @@ In each Channel you have following states:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.1.0 (2023-11-27)
 * (icastillo15) Support for HERE v8 api protocoll has been added.
 * (mcm1957) Dependencies have been updated.
 

@@ -1,6 +1,8 @@
-/* jshint -W097 */// jshint strict:false
-/*jslint node: true */
 'use strict';
+
+/*
+ * Created with @iobroker/create-adapter v2.5.0
+ */
 
 const request = require('request');
 const utils = require('@iobroker/adapter-core');
@@ -204,7 +206,6 @@ adapter.on('ready', function () {
         }
         routes = adapter.config.routepoints;
         if (!adapter.config.apiKEY) {
-            adapter.log.error('https://github.com/BuZZy1337/ioBroker.roadtraffic#getting-started');
             adapter.log.error('You need to set the Api KEY in the instance settings!');
         }
         main();
@@ -438,7 +439,6 @@ function checkChannels(arg) {
 
 function checkDuration(name) {
     if (!adapter.config.apiKEY) {
-        adapter.log.error('https://github.com/BuZZy1337/ioBroker.roadtraffic#getting-started');
         adapter.log.error('You need to set the Api KEY in the instance settings!');
         return;
     }
@@ -455,8 +455,8 @@ function checkDuration(name) {
             if (err) return;
             const origin = encodeURIComponent(obj.native.originGeo);
             const destination = encodeURIComponent(obj.native.destinationGeo);
-            const link = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + adapter.config.apiKEY + '&waypoint0=' + origin + '&waypoint1=' + destination + '&jsonAttributes=41&mode=fastest;car;traffic:enabled;&language=de-de';
-            adapter.log.debug('HERE REQ:'+'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + '*****' + '&waypoint0=' + origin + '&waypoint1=' + destination + '&jsonAttributes=41&mode=fastest;car;traffic:enabled;&language=de-de');
+            const link = 'https://router.hereapi.com/v8/routes?apikey=' + adapter.config.apiKEY + '&origin=' + origin + '&destination=' + destination + '&return=summary,typicalDuration&transportMode=car&lang=de';
+            adapter.log.debug('HERE REQ:'+'https://router.hereapi.com/v8/routes?apikey=' + '*****' + '&origin=' + origin + '&destination=' + destination + '&return=summary,typicalDuration&transportMode=car&lang=de');
             request({ url: link, timeout: 15000 }, function (error, response, body) {
                 if (!error) {
                     try {
@@ -468,12 +468,12 @@ function checkDuration(name) {
                             } else {
                                 adapter.log.debug('HERE response: ' + JSON.stringify(info));
                                 try {
-                                    adapter.setState(name + '.route.distance', info.response.route[0].summary.distance, true);
-                                    adapter.setState(name + '.route.distanceText', (info.response.route[0].summary.distance / 1000).toFixed(2).toString() + ' km', true);
-                                    adapter.setState(name + '.route.duration', info.response.route[0].summary.baseTime, true);
-                                    adapter.setState(name + '.route.durationText', secondsToTime(info.response.route[0].summary.baseTime), true);
-                                    adapter.setState(name + '.route.durationTraffic', info.response.route[0].summary.trafficTime, true);
-                                    adapter.setState(name + '.route.durationTrafficText', secondsToTime(info.response.route[0].summary.trafficTime), true);
+                                    adapter.setState(name + '.route.distance', info.routes[0].sections[0].summary.length, true);
+                                    adapter.setState(name + '.route.distanceText', (info.routes[0].sections[0].summary.length / 1000).toFixed(2).toString() + ' km', true);
+                                    adapter.setState(name + '.route.duration', info.routes[0].sections[0].summary.baseDuration, true);
+                                    adapter.setState(name + '.route.durationText', secondsToTime(info.routes[0].sections[0].summary.baseDuration), true);
+                                    adapter.setState(name + '.route.durationTraffic', info.routes[0].sections[0].summary.typicalDuration, true);
+                                    adapter.setState(name + '.route.durationTrafficText', secondsToTime(info.routes[0].sections[0].summary.typicalDuration), true);
                                     if (adapter.config.alarmEnabled) {
                                         calcAlarm(true, name, false);
                                     }
@@ -513,8 +513,8 @@ function resetTrigger() {
 }
 
 function checkApiKey() {
-    const link = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + adapter.config.apiKEY + '&waypoint0=geo!52.5170365,13.3888599&waypoint1=geo!52.5170365,13.3888599&mode=fastest;car;traffic:enabled;&language=de-de';
-    adapter.log.debug('HERE REQ:' + 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apikey=' + '*****' + '&waypoint0=geo!52.5170365,13.3888599&waypoint1=geo!52.5170365,13.3888599&mode=fastest;car;traffic:enabled;&language=de-de');
+    const link = 'https://router.hereapi.com/v8/routes?apikey=' + adapter.config.apiKEY + '&origin=52.5170365,13.3888599&destination=52.5170365,13.3888599&transportMode=car&return=summary';
+    adapter.log.debug('HERE REQ:' + 'https://router.hereapi.com/v8/routes?apikey=' + adapter.config.apiKEY + '&origin=52.5170365,13.3888599&destination=52.5170365,13.3888599&transportMode=car&return=summary');
     request({ url: link, timeout: 15000 }, function (error, response, body) {
         if (!error) {
             try {
@@ -561,15 +561,15 @@ function geoCode(num, cb) {
             type = 'destination';
         }
         routePoint = routes[num][type];
-        const link = 'https://geocoder.ls.hereapi.com/6.2/geocode.json?apikey=' + adapter.config.apiKEY + '&searchtext=' + encodeURIComponent(routePoint);
+        const link = 'https://geocode.search.hereapi.com/v1/geocode?apikey=' + adapter.config.apiKEY + '&q=' + encodeURIComponent(routePoint);
         request({ url: link, timeout: 15000 }, function (error, response, body) {
             if (!error) {
                 try {
                     const info = JSON.parse(body);
                     if (response.statusCode === 200) {
-                        adapter.log.debug(routePoint + ' resolved to: ' + info.Response.View[0].Result[0].Location.Address.Label);
-                        adapter.log.debug(routePoint + ' coordinates Lat: ' + info.Response.View[0].Result[0].Location.NavigationPosition[0].Latitude + ' Long: ' + info.Response.View[0].Result[0].Location.NavigationPosition[0].Longitude);
-                        const geo = 'geo!' + info.Response.View[0].Result[0].Location.NavigationPosition[0].Latitude + ',' + info.Response.View[0].Result[0].Location.NavigationPosition[0].Longitude;
+                        adapter.log.debug(routePoint + ' resolved to: ' + info.items[0].address.label);
+                        adapter.log.debug(routePoint + ' coordinates Lat: ' + info.items[0].position.lat + ' Long: ' + info.items[0].position.lng);
+                        const geo = info.items[0].position.lat + ',' + info.items[0].position.lng;
                         routes[num][type + 'Geo'] = geo;
                         run++;
                         if (run < routes.length * 2) {
@@ -633,7 +633,6 @@ function main() {
             }, adapter.config.pollingInterval * 60 * 1000);
         }
     } else {
-        adapter.log.error('https://github.com/BuZZy1337/ioBroker.roadtraffic#getting-started');
         adapter.log.error('You need to set the Api KEY in the instance settings!');
     }
     adapter.log.debug('Selected Alexa for Alarm: ' + adapter.config.alexa);

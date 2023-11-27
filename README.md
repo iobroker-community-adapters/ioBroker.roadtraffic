@@ -90,6 +90,7 @@ In each Channel you have following states:
 -->
 ### **WORK IN PROGRESS**
 * (icastillo15) add support for HERE v8 api
+* (mcm1957) Dependencies have been updated.
 
 ### 1.0.2 (2023-10-27)
 * (mcm1957) Error logging has been corrected.

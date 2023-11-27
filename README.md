@@ -88,6 +88,9 @@ In each Channel you have following states:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (icastillo15) add support for HERE v8 api
+
 ### 1.0.2 (2023-10-27)
 * (mcm1957) Error logging has been corrected.
 
@@ -114,6 +117,10 @@ In each Channel you have following states:
 
 ### 0.0.1
 * (BuZZy1337) initial release
+
+
+## Credits
+Code adaptions to use HERE v8 pi have been provided by @icastillo15 <starwarsmalu@gmail.com>.
 
 ## License
 The MIT License (MIT)

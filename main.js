@@ -300,6 +300,9 @@ function checkChannels(arg) {
                                 }
                                 else if (obj.native.origin !== device[obj.native.routeid].native.origin || obj.native.destination !== device[obj.native.routeid].native.destination) {
                                     adapter.log.debug('Route ' + currentIdsObject[obj.native.routeid] + ' has to be updated - because origin or destination changed!');
+                                    //
+                                    // keep objects - the will be resynced using extendObject
+                                    //
                                     //const index = toCreate.indexOf(obj.native.routeid);
                                     //if (index > -1) {
                                     //    toCreate.splice(index, 1);
@@ -308,6 +311,9 @@ function checkChannels(arg) {
                                 }
                                 else {
                                     adapter.log.debug('Route ' + currentIdsObject[obj.native.routeid] + ' hast not changed..');
+                                    //
+                                    // keep objects - the will be resynced using extendObject
+                                    //
                                     //const index = toCreate.indexOf(obj.native.routeid);
                                     //if (index > -1) {
                                     //    toCreate.splice(index, 1);

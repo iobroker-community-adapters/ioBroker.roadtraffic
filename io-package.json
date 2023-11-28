@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "roadtraffic",
-    "version": "1.1.1-alpha.1",
+    "version": "1.1.1-alpha.2",
     "news": {
+      "1.1.1-alpha.2": {
+        "en": "Role definitions have been corrected.",
+        "de": "Rollendefinitionen wurden korrigiert.",
+        "ru": "Исправлены определения роли.",
+        "pt": "Definições de função foram corrigidas.",
+        "nl": "De definities zijn gecorrigeerd.",
+        "fr": "Les définitions de rôle ont été corrigées.",
+        "it": "Le definizioni dei ruoli sono state corrette.",
+        "es": "Se han corregido las definiciones de papel.",
+        "pl": "Definicje Role zostały poprawione.",
+        "uk": "Виправлено визначення ролі.",
+        "zh-cn": "作用定义已得到纠正。."
+      },
       "1.1.1-alpha.1": {
         "en": "Role definitions have been corrected.",
         "de": "Rollendefinitionen wurden korrigiert.",
@@ -80,19 +93,6 @@
         "pl": "Okładki doniesione przez adaptatora ioBrokera zostały ustalone.",
         "uk": "Виправлено випуски, які повідомляються іоБрокером адаптером, і зафіксовано.",
         "zh-cn": "奥布罗克变器和润滑剂所报告的问题已经确定。."
-      },
-      "1.0.0": {
-        "en": "This adapter has been moved into iobroker-community-organization.\nAdapter requires nodejs 18.x or newer now.\nDependencies have been updated.",
-        "de": "Dieser Adapter wurde in die iobroker-community-Organisation überführt.\nAdapter erfordert jetzt nodejs 18.x oder neuer.\nAbhängigkeiten wurden aktualisiert.",
-        "ru": "Этот адаптер был перемещен в iobroker-community-organization.\nАдаптер требует nodejs 18.x или новее теперь.\nОбновлены зависимости.",
-        "pt": "Este adaptador foi movido para iobroker-comunidade-organização.\nAdaptador requer nodejs 18.x ou mais recente agora.\nAs dependências foram atualizadas.",
-        "nl": "Deze adapter is verplaatst naar iobroker-community-organisatie.\nAdapter vereist nodejs 18.x of Newer nu.\nAfhankelijkheid is geüpdateerd.",
-        "fr": "Cet adaptateur a été déplacé dans l'iobroker-community-organization.\nAdaptateur nécessite nodejs 18.x ou plus récent maintenant.\nLes dépendances ont été mises à jour.",
-        "it": "Questo adattatore è stato spostato in iobroker-community-organizzazione.\nAdattatore richiede nodejs 18.x o più recente ora.\nLe dipendenze sono state aggiornate.",
-        "es": "Este adaptador se ha trasladado a la organización yobroker-community.\nAdaptador requiere nodejs 18.x o nuevo ahora.\nSe han actualizado las dependencias.",
-        "pl": "Ta adapter została przeniesiona do iobroker-community-organization.\nAdapter wymaga węzła 18.x lub nowszego.\nW zależności zostały zaktualizowane.",
-        "uk": "Цей адаптер був перенесений в iobroker-community-organization.\nАдаптер вимагає nodejs 18.x або новіший зараз.\nОновлено залежність.",
-        "zh-cn": "这种适应者已搬入零星-社区组织。.\n现在需要第18x或新人员。.\n情况已经更新。."
       }
     },
     "titleLang": {

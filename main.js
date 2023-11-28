@@ -300,18 +300,18 @@ function checkChannels(arg) {
                                 }
                                 else if (obj.native.origin !== device[obj.native.routeid].native.origin || obj.native.destination !== device[obj.native.routeid].native.destination) {
                                     adapter.log.debug('Route ' + currentIdsObject[obj.native.routeid] + ' has to be updated - because origin or destination changed!');
-                                    const index = toCreate.indexOf(obj.native.routeid);
-                                    if (index > -1) {
-                                        toCreate.splice(index, 1);
-                                    }
+                                    //const index = toCreate.indexOf(obj.native.routeid);
+                                    //if (index > -1) {
+                                    //    toCreate.splice(index, 1);
+                                    //}
                                     toUpdate.push(obj.native.routeid);
                                 }
                                 else {
                                     adapter.log.debug('Route ' + currentIdsObject[obj.native.routeid] + ' hast not changed..');
-                                    const index = toCreate.indexOf(obj.native.routeid);
-                                    if (index > -1) {
-                                        toCreate.splice(index, 1);
-                                    }
+                                    //const index = toCreate.indexOf(obj.native.routeid);
+                                    //if (index > -1) {
+                                    //    toCreate.splice(index, 1);
+                                    //}
                                     okayIds.push(obj.native.routeid);
                                 }
                                 if (checkCount === currentIdsArray.length) {

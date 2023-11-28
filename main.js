@@ -377,19 +377,19 @@ function checkChannels(arg) {
                     toCreate.forEach(function (val, _i) {
                         try {
                             adapter.log.debug('Creating ' + device[val].common.name);
-                            adapter.setObjectNotExists(device[val].common.name, device[val], function (err) {
+                            adapter.extendObject(device[val].common.name, device[val], function (err) {
                                 if (err) {
                                     adapter.log.error('Error in creating Device for Route: ' + err);
                                 } else {
                                     adapter.log.debug('Success: Created Device ' + device[val].common.name);
                                     objs.channelsArray.forEach(function (value, _i) {
-                                        adapter.setObjectNotExists(device[val].common.name + '.' + value, objs.channels[value], function (err) {
+                                        adapter.extendObject(device[val].common.name + '.' + value, objs.channels[value], function (err) {
                                             if (!err) {
                                                 adapter.log.debug('Created channel ' + device[val].common.name + '.' + value);
                                                 createdChannelCount++;
                                                 if (value === 'route') {
                                                     objs.statesArray.forEach(function (value, _i) {
-                                                        adapter.setObjectNotExists(device[val].common.name + '.route.' + value, objs.states[value], function (err) {
+                                                        adapter.extendObject(device[val].common.name + '.route.' + value, objs.states[value], function (err) {
                                                             if (err) {
                                                                 adapter.log.error(err);
                                                             }
@@ -404,7 +404,7 @@ function checkChannels(arg) {
                                                     });
                                                 } else if (objs.daysArray.indexOf(value) !== -1) {
                                                     objs.alarmArray.forEach(function (val2, _i) {
-                                                        adapter.setObjectNotExists(device[val].common.name + '.' + value + '.' + val2, objs.alarm[val2], function (err) {
+                                                        adapter.extendObject(device[val].common.name + '.' + value + '.' + val2, objs.alarm[val2], function (err) {
                                                             if (err) {
                                                                 adapter.log.error(err);
                                                             }

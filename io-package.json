@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "roadtraffic",
-    "version": "1.1.1-alpha.2",
+    "version": "1.1.1",
     "news": {
+      "1.1.1": {
+        "en": "Role definitions have been corrected.",
+        "de": "Rollendefinitionen wurden korrigiert.",
+        "ru": "Исправлены определения роли.",
+        "pt": "Definições de função foram corrigidas.",
+        "nl": "De definities zijn gecorrigeerd.",
+        "fr": "Les définitions de rôle ont été corrigées.",
+        "it": "Le definizioni dei ruoli sono state corrette.",
+        "es": "Se han corregido las definiciones de papel.",
+        "pl": "Definicje Role zostały poprawione.",
+        "uk": "Виправлено визначення ролі.",
+        "zh-cn": "作用定义已得到纠正。."
+      },
       "1.1.1-alpha.2": {
         "en": "Role definitions have been corrected.",
         "de": "Rollendefinitionen wurden korrigiert.",
@@ -80,19 +93,6 @@
         "pl": "Error loglog został poprawiony.",
         "uk": "Виправлено помилку.",
         "zh-cn": "伐木已被纠正。."
-      },
-      "1.0.1": {
-        "en": "Issues reported by ioBroker adapter checker and lint have been fixed.",
-        "de": "Die von ioBroker Adapter Checker und Lint gemeldeten Probleme wurden behoben.",
-        "ru": "Проблемы, сообщаемые ioBroker адаптером checker и lint, были зафиксированы.",
-        "pt": "Questões relatadas pelo verificador do adaptador ioBroker e lint foram corrigidas.",
-        "nl": "Issues gemeld door ioBroker adapter en lint zijn gerepareerd.",
-        "fr": "Les problèmes signalés par ioBroker adaptateur checker et lint ont été corrigés.",
-        "it": "I problemi segnalati dall'adattatore ioBroker checker e lint sono stati fissati.",
-        "es": "Se han solucionado los problemas reportados por el adaptador de ioBroker y el forro.",
-        "pl": "Okładki doniesione przez adaptatora ioBrokera zostały ustalone.",
-        "uk": "Виправлено випуски, які повідомляються іоБрокером адаптером, і зафіксовано.",
-        "zh-cn": "奥布罗克变器和润滑剂所报告的问题已经确定。."
       }
     },
     "titleLang": {

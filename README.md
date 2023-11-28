@@ -88,7 +88,7 @@ In each Channel you have following states:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.1.1 (2023-11-28)
 * (mcm1957) Role definitions have been corrected.
 
 ### 1.1.0 (2023-11-27)

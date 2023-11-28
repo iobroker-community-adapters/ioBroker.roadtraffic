@@ -183,7 +183,7 @@
         "name": "Refresh all routes now.",
         "type": "boolean",
         "role": "button",
-        "read": true,
+        "read": false,
         "write": true
       },
       "native": {}

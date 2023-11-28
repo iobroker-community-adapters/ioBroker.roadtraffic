@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "roadtraffic",
-    "version": "1.1.0",
+    "version": "1.1.1-alpha.0",
     "news": {
+      "1.1.1-alpha.0": {
+        "en": "Role definitions have been corrected.",
+        "de": "Rollendefinitionen wurden korrigiert.",
+        "ru": "Исправлены определения роли.",
+        "pt": "Definições de função foram corrigidas.",
+        "nl": "De definities zijn gecorrigeerd.",
+        "fr": "Les définitions de rôle ont été corrigées.",
+        "it": "Le definizioni dei ruoli sono state corrette.",
+        "es": "Se han corregido las definiciones de papel.",
+        "pl": "Definicje Role zostały poprawione.",
+        "uk": "Виправлено визначення ролі.",
+        "zh-cn": "作用定义已得到纠正。."
+      },
       "1.1.0": {
         "en": "Support for HERE v8 api protocol has been added.\nDependencies have been updated.",
         "de": "Die Unterstützung für HERE v8 api Protokoll wurde hinzugefügt.\nAbhängigkeiten wurden aktualisiert.",
@@ -79,18 +92,6 @@
         "es": "Reloj despertador agregado. Consulte la sección Léame \"Despertador\" para más detalles.",
         "pl": "Dodano budzik. Szczegółowe informacje można znaleźć w sekcji „Budzik” w pliku Readme",
         "zh-cn": "添加了闹钟。有关详细信息，请参见自述文件“闹钟”"
-      },
-      "0.1.1": {
-        "en": "Delete instance before update!!\nChanged HERE.com Api Authentication!\nALARMCLOCK NOT WORKING YET!!\nNew API Key needed (Readme)!!",
-        "de": "Instanz vor Update löschen!!\nHERE.com-API-Authentifizierung geändert!\nWECKER FUNKTIONIERT NOCH NICHT!!\nNeuer API-Schlüssel erforderlich (Readme)!!",
-        "ru": "Удалить экземпляр перед обновлением !!\nизменил аутентификацию Api HERE.com!\nТРЕВОГА НЕ РАБОТАЕТ !!\nТребуется новый ключ API (Readme) !!",
-        "pt": "Excluir instância antes da atualização !!\nAlterada a autenticação da API do HERE.com!\nO RELÓGIO DE ALARME NÃO FUNCIONA AINDA !!\nNova chave de API necessária (Leia-me) !!",
-        "nl": "Verwijder exemplaar vóór update !!\nVeranderd HERE.com Api-authenticatie!\nALARMCLOCK WERKT NOG NIET !!\nNieuwe API-sleutel nodig (Readme) !!",
-        "fr": "Supprimer l'instance avant la mise à jour !!\nModification de l'authentification Api HERE.com!\nALARMCLOCK NE FONCTIONNE PAS ENCORE !!\nNouvelle clé API requise (fichier Lisez-moi) !!",
-        "it": "Elimina l'istanza prima dell'aggiornamento !!\nAutenticazione Api HERE.com modificata!\nALARMCLOCK NON FUNZIONA ANCORA !!\nNuova chiave API necessaria (file Leggimi) !!",
-        "es": "Eliminar instancia antes de actualizar !!\n¡Cambió la autenticación de la API de HERE.com!\nALARMCLOCK NO FUNCIONA TODAVÍA !!\nNueva clave API necesaria (Léame) !!",
-        "pl": "Usuń instancję przed aktualizacją !!\nZmieniono uwierzytelnianie interfejsu HERE.com!\nALARMCLOCK NIE DZIAŁA JESZCZE !!\nPotrzebny nowy klucz API (plik Readme) !!",
-        "zh-cn": "在更新之前删除实例！！\n更改了HERE.com Api验证！\n警报尚未生效！！\n需要新的API密钥（自述文件）！"
       }
     },
     "titleLang": {

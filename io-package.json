@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "roadtraffic",
-    "version": "1.1.1-alpha.0",
+    "version": "1.1.1-alpha.1",
     "news": {
+      "1.1.1-alpha.1": {
+        "en": "Role definitions have been corrected.",
+        "de": "Rollendefinitionen wurden korrigiert.",
+        "ru": "Исправлены определения роли.",
+        "pt": "Definições de função foram corrigidas.",
+        "nl": "De definities zijn gecorrigeerd.",
+        "fr": "Les définitions de rôle ont été corrigées.",
+        "it": "Le definizioni dei ruoli sono state corrette.",
+        "es": "Se han corregido las definiciones de papel.",
+        "pl": "Definicje Role zostały poprawione.",
+        "uk": "Виправлено визначення ролі.",
+        "zh-cn": "作用定义已得到纠正。."
+      },
       "1.1.1-alpha.0": {
         "en": "Role definitions have been corrected.",
         "de": "Rollendefinitionen wurden korrigiert.",
@@ -80,18 +93,6 @@
         "pl": "Ta adapter została przeniesiona do iobroker-community-organization.\nAdapter wymaga węzła 18.x lub nowszego.\nW zależności zostały zaktualizowane.",
         "uk": "Цей адаптер був перенесений в iobroker-community-organization.\nАдаптер вимагає nodejs 18.x або новіший зараз.\nОновлено залежність.",
         "zh-cn": "这种适应者已搬入零星-社区组织。.\n现在需要第18x或新人员。.\n情况已经更新。."
-      },
-      "0.2.0": {
-        "en": "Added Alarm-Clock. See Readme \"Alarm-Clock\" section for details",
-        "de": "Wecker hinzugefügt. Weitere Informationen finden Sie im Readme-Abschnitt \"Alarm-Clock\"",
-        "ru": "Добавлен будильник. Смотрите Readme \"Будильник\" раздел для деталей",
-        "pt": "Adicionado Despertador. Consulte a seção Leia-me \"Despertador\" para obter detalhes",
-        "nl": "Wekker toegevoegd. Zie het gedeelte Leesmij \"Wekker\" voor meer informatie",
-        "fr": "Réveil ajouté. Voir la section \"Réveil\" du fichier Lisez-moi pour plus de détails.",
-        "it": "Sveglia aggiunta. Vedere la sezione \"Sveglia\" del file Leggimi per i dettagli",
-        "es": "Reloj despertador agregado. Consulte la sección Léame \"Despertador\" para más detalles.",
-        "pl": "Dodano budzik. Szczegółowe informacje można znaleźć w sekcji „Budzik” w pliku Readme",
-        "zh-cn": "添加了闹钟。有关详细信息，请参见自述文件“闹钟”"
       }
     },
     "titleLang": {

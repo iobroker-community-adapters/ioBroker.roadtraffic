@@ -132,7 +132,7 @@ Code adaptions to use HERE v8 pi have been provided by @icastillo15 <starwarsmal
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2023-2024 ioBroker Community Developers <iobroker-community-adapters@gmx.de>  
+Copyright (c) 2023-2025 ioBroker Community Developers <iobroker-community-adapters@gmx.de>  
 Copyright (c) 2019 BuZZy1337 <buzzy1337@outlook.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

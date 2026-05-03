@@ -132,6 +132,8 @@ In each Channel you have following states:
 ### 0.0.1
 * (BuZZy1337) initial release
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## Credits
 Code adaptions to use HERE v8 pi have been provided by @icastillo15 <starwarsmalu@gmail.com>.
 

@@ -22,7 +22,7 @@
     "url": "https://github.com/iobroker-community-adapters/ioBroker.roadtraffic"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 20"
   },
   "dependencies": {
     "request": "^2.85.0",
